@@ -6,3 +6,5 @@ bookorbit/data/
 shoko/config/
 vaultwarden/data/
 vaultwarden/caddy/
+# Caddy access logs (rotated, 5x10MiB)
+caddy/logs/

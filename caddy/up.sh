@@ -8,5 +8,6 @@ docker rm -f caddy 2>/dev/null || true
 docker run -d --name caddy --restart unless-stopped --network host \
   -v "$PWD/Caddyfile:/etc/caddy/Caddyfile:ro" \
   -v caddy-data:/data -v caddy-config:/config \
+  -v "$PWD/logs:/var/log/caddy" \
   --env-file ../duckdns/.env \
   caddy-duckdns:local

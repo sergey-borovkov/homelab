@@ -11,6 +11,14 @@
 }
 
 *.daoseeking.duckdns.org, *.daoseeking.duckdns.org:8443 {
+	log {
+		output file /var/log/caddy/access.log {
+			roll_size 10MiB
+			roll_keep 5
+			mode 0644
+		}
+		format json
+	}
 	@books host books.daoseeking.duckdns.org
 	handle @books {
 		reverse_proxy 127.0.0.1:3000
