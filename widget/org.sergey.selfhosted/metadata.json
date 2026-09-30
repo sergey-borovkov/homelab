@@ -1,0 +1,12 @@
+{
+    "KPlugin": {
+        "Id": "org.sergey.selfhosted",
+        "Name": "Self-hosted",
+        "Description": "Live status of self-hosted services",
+        "Icon": "network-server",
+        "Authors": [{ "Name": "sergey" }],
+        "Version": "1.0"
+    },
+    "KPackageStructure": "Plasma/Applet",
+    "X-Plasma-API-Minimum-Version": "6.0"
+}
