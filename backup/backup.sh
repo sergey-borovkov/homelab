@@ -29,6 +29,9 @@ docker exec ryot-db pg_dump -U postgres -Fc postgres > "$OUT/ryot.pgdump"
 set -a; . "$H/bookorbit/.env"; set +a
 docker exec bookorbit-db pg_dump -U "$POSTGRES_USER" -Fc "$POSTGRES_DB" > "$OUT/bookorbit.pgdump"
 
+# AdGuard Home config (root-owned inside the container -> read via docker)
+docker exec adguard tar -C /opt/adguardhome -czf - conf > "$OUT/adguard-conf.tgz"
+
 # Secrets + config + notes
 tar -C "$H" -czf "$OUT/env-secrets.tgz" $(cd "$H" && ls */.env)
 tar -C /home/sergey -czf "$OUT/system-notes.tgz" system-notes

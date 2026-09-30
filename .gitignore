@@ -8,3 +8,6 @@ vaultwarden/data/
 vaultwarden/caddy/
 # Caddy access logs (rotated, 5x10MiB)
 caddy/logs/
+# AdGuard Home state (root-owned, has password hash + query log); backed up by backup.sh
+adguard/conf/
+adguard/work/

@@ -10,7 +10,8 @@ Docs, the why, and gotchas: `~/system-notes/homelab.md` and `~/system-notes/home
 |---|---|
 | caddy | HTTPS reverse proxy, wildcard cert via DuckDNS DNS-01, :443/:8443 |
 | duckdns | keeps daoseeking.duckdns.org pointed at the public IP |
-| dns | home dnsmasq: *.daoseeking.duckdns.org → 192.168.1.216 on the LAN |
+| adguard | **AdGuard Home** LAN DNS (192.168.1.216:53) + ad blocking; UI http://192.168.1.216:3080 |
+| dns | OLD dnsmasq home-dns, replaced by adguard 2026-09-30 (container stopped, kept for rollback) |
 | ryot | media tracker (Jellyfin webhook sink) |
 | bookorbit | ebooks/manga library |
 | shoko | anime file identification for Shokofin |
