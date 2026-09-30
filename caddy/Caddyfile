@@ -76,6 +76,20 @@
 	handle @requests {
 		reverse_proxy 127.0.0.1:5055
 	}
+	@status host status.daoseeking.duckdns.org
+	handle @status {
+		respond @outside "LAN only" 403
+		reverse_proxy 127.0.0.1:3001
+	}
+	@budget host budget.daoseeking.duckdns.org
+	handle @budget {
+		reverse_proxy 127.0.0.1:5006
+	}
+	@home host home.daoseeking.duckdns.org
+	handle @home {
+		respond @outside "LAN only" 403
+		reverse_proxy 127.0.0.1:8123
+	}
 	handle {
 		abort
 	}

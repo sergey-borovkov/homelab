@@ -11,3 +11,12 @@ caddy/logs/
 # AdGuard Home state (root-owned, has password hash + query log); backed up by backup.sh
 adguard/conf/
 adguard/work/
+arr/qbittorrent/
+arr/prowlarr/
+arr/sonarr/
+arr/radarr/
+arr/bazarr/
+arr/seerr/
+actual/data/
+uptime-kuma/data/
+homeassistant/config/
