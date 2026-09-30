@@ -1,0 +1,8 @@
+# Secrets: real values live only on this machine (see <svc>/.env.example for the keys)
+.env
+# Data, not config: back these up separately, never commit
+bookorbit/books/
+bookorbit/data/
+shoko/config/
+vaultwarden/data/
+vaultwarden/caddy/

@@ -1,0 +1,33 @@
+# HTTPS reverse proxy for the homelab.
+# ISP blocks inbound 80/443, so: certs via DuckDNS DNS-01 (no inbound port needed),
+# and the router forwards external 8443 -> 192.168.1.216:443.
+# DuckDNS holds only ONE TXT record per account-domain, so parallel per-host challenges
+# clobber each other -> use a single wildcard cert and route by host.
+# Public URLs: https://<svc>.daoseeking.duckdns.org:8443 . Caddy also listens on 8443 itself so LAN
+# clients (router has no NAT loopback) can hit this PC directly via hosts/local DNS override.
+{
+	admin 127.0.0.1:2019
+	acme_dns duckdns {env.TOKEN}
+}
+
+*.daoseeking.duckdns.org, *.daoseeking.duckdns.org:8443 {
+	@books host books.daoseeking.duckdns.org
+	handle @books {
+		reverse_proxy 127.0.0.1:3000
+	}
+	@jellyfin host jellyfin.daoseeking.duckdns.org
+	handle @jellyfin {
+		reverse_proxy 127.0.0.1:8096
+	}
+	@ryot host ryot.daoseeking.duckdns.org
+	handle @ryot {
+		reverse_proxy 127.0.0.1:8000
+	}
+	@vault host vault.daoseeking.duckdns.org
+	handle @vault {
+		reverse_proxy 127.0.0.1:8222
+	}
+	handle {
+		abort
+	}
+}

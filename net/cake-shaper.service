@@ -1,0 +1,15 @@
+[Unit]
+Description=CAKE upload shaping on enp38s0 (~90% of 135 Mbit/s uplink) with priority tins
+# diffserv4: Voice > Video/interactive > Best effort (games, web) > Bulk.
+# qBittorrent marks peer traffic ToS 0x20 (CS1) by default -> lands in Bulk automatically.
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/tc qdisc replace dev enp38s0 root cake bandwidth 120mbit diffserv4 triple-isolate
+ExecStop=/usr/bin/tc qdisc del dev enp38s0 root
+
+[Install]
+WantedBy=multi-user.target
