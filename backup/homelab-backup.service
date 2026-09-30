@@ -1,0 +1,6 @@
+[Unit]
+Description=Nightly homelab backup to d2 (+ git mirror on d1)
+
+[Service]
+Type=oneshot
+ExecStart=/home/sergey/homelab/backup/backup.sh
