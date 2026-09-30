@@ -32,6 +32,16 @@ docker exec bookorbit-db pg_dump -U "$POSTGRES_USER" -Fc "$POSTGRES_DB" > "$OUT/
 # AdGuard Home config (root-owned inside the container -> read via docker)
 docker exec adguard tar -C /opt/adguardhome -czf - conf > "$OUT/adguard-conf.tgz"
 
+# *arr stack configs + DBs (owned by uid 1000; skip logs/covers/built-in backups)
+tar -C "$H/arr" -czf "$OUT/arr.tgz" --exclude='*/logs' --exclude='*/logs.db*' --exclude='*/MediaCover' \
+  --exclude='*/Backups' --exclude='*/cache' --exclude='*/log' --exclude='*/backup' \
+  qbittorrent prowlarr sonarr radarr bazarr seerr 2>/dev/null || true
+# root-owned app data -> read via the containers
+docker exec actual tar -C / -czf - data > "$OUT/actual.tgz"
+docker exec uptime-kuma tar -C /app -czf - --exclude='data/screenshots' data > "$OUT/uptime-kuma.tgz"
+docker exec homeassistant tar -C / -czf - --exclude='config/home-assistant_v2.db*' --exclude='config/*.log*' \
+  --exclude='config/deps' --exclude='config/tts' config > "$OUT/homeassistant.tgz"
+
 # Secrets + config + notes
 tar -C "$H" -czf "$OUT/env-secrets.tgz" $(cd "$H" && ls */.env)
 tar -C /home/sergey -czf "$OUT/system-notes.tgz" system-notes
