@@ -1,7 +1,7 @@
 import asyncio, json, os, aiohttp
 TOKEN=os.environ['HA_TOKEN']; V='vacuum.x50_ultra_complete'; P='x50_ultra_complete'
 rooms=[(1,'Primary Bedroom','mdi:bed-king-outline'),(4,'Sergey Cabinet','mdi:desk'),(6,'Kitchen','mdi:stove'),
-       (7,'Living Room','mdi:sofa'),(8,'Room 8','mdi:door'),(9,'Corridor','mdi:foot-print'),(3,'Bathroom','mdi:toilet'),(2,'Bathroom 2','mdi:shower')]
+       (7,'Living Room','mdi:sofa'),(8,"Kristina's Office",'mdi:desk-lamp'),(9,'Corridor','mdi:foot-print'),(3,'Bathroom','mdi:toilet'),(2,'Bathroom 2','mdi:shower')]
 room_btns=[{'type':'button','name':n,'icon':i,'show_state':False,
   'tap_action':{'action':'perform-action','perform_action':'dreame_vacuum.vacuum_clean_segment','target':{'entity_id':V},'data':{'segments':[sid]},
                 'confirmation':{'text':f'Clean {n}?'}}} for sid,n,i in rooms]
