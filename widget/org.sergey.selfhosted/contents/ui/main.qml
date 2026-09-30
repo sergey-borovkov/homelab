@@ -12,18 +12,21 @@ PlasmoidItem {
     preferredRepresentation: fullRepresentation
 
     property var services: [
-        { name: "Jellyfin",  port: 8096, url: "http://localhost:8096", open: "https://jellyfin.daoseeking.duckdns.org:8443", containers: ["jellyfin"] },
-        { name: "BookOrbit", port: 3000, url: "http://localhost:3000", open: "https://books.daoseeking.duckdns.org:8443", containers: ["bookorbit-app","bookorbit-db"] },
-        { name: "Ryot",      port: 8000, url: "http://localhost:8000", open: "https://ryot.daoseeking.duckdns.org:8443", containers: ["ryot","ryot-db"] },
-        { name: "Vaultwarden", port: 8222, url: "http://127.0.0.1:8222/alive", open: "https://vault.daoseeking.duckdns.org:8443", containers: ["vaultwarden"] },
-        { name: "Shoko",     port: 8111, url: "http://localhost:8111", open: "https://shoko.daoseeking.duckdns.org:8443/webui", containers: ["shoko"] },
-        { name: "AdGuard",   port: 3080, url: "http://192.168.1.216:3080", open: "https://adguard.daoseeking.duckdns.org:8443", containers: ["adguard"] },
-        { name: "Seerr",     port: 5055, url: "http://127.0.0.1:5055", open: "https://requests.daoseeking.duckdns.org:8443", containers: ["seerr"] },
-        { name: "Sonarr",    port: 8989, url: "http://127.0.0.1:8989", open: "https://sonarr.daoseeking.duckdns.org:8443", containers: ["sonarr"] },
-        { name: "Radarr",    port: 7878, url: "http://127.0.0.1:7878", open: "https://radarr.daoseeking.duckdns.org:8443", containers: ["radarr"] },
-        { name: "Prowlarr",  port: 9696, url: "http://127.0.0.1:9696", open: "https://prowlarr.daoseeking.duckdns.org:8443", containers: ["prowlarr","flaresolverr"] },
+        { name: "Jellyfin", port: 8096, url: "http://localhost:8096", open: "https://jellyfin.daoseeking.duckdns.org:8443", containers: ["jellyfin"] },
+        { name: "Seerr", port: 5055, url: "http://127.0.0.1:5055", open: "https://requests.daoseeking.duckdns.org:8443", containers: ["seerr"] },
+        { name: "Sonarr", port: 8989, url: "http://127.0.0.1:8989", open: "https://sonarr.daoseeking.duckdns.org:8443", containers: ["sonarr"] },
+        { name: "Radarr", port: 7878, url: "http://127.0.0.1:7878", open: "https://radarr.daoseeking.duckdns.org:8443", containers: ["radarr"] },
+        { name: "Prowlarr", port: 9696, url: "http://127.0.0.1:9696", open: "https://prowlarr.daoseeking.duckdns.org:8443", containers: ["prowlarr","flaresolverr"] },
         { name: "qBittorrent", port: 8090, url: "http://127.0.0.1:8090", open: "https://qbit.daoseeking.duckdns.org:8443", containers: ["qbittorrent"] },
-        { name: "Bazarr",    port: 6767, url: "http://127.0.0.1:6767", open: "https://bazarr.daoseeking.duckdns.org:8443", containers: ["bazarr"] }
+        { name: "Bazarr", port: 6767, url: "http://127.0.0.1:6767", open: "https://bazarr.daoseeking.duckdns.org:8443", containers: ["bazarr"] },
+        { name: "Shoko", port: 8111, url: "http://localhost:8111", open: "https://shoko.daoseeking.duckdns.org:8443/webui", containers: ["shoko"] },
+        { name: "BookOrbit", port: 3000, url: "http://localhost:3000", open: "https://books.daoseeking.duckdns.org:8443", containers: ["bookorbit-app","bookorbit-db"] },
+        { name: "Ryot", port: 8000, url: "http://localhost:8000", open: "https://ryot.daoseeking.duckdns.org:8443", containers: ["ryot","ryot-db"] },
+        { name: "Vaultwarden", port: 8222, url: "http://127.0.0.1:8222/alive", open: "https://vault.daoseeking.duckdns.org:8443", containers: ["vaultwarden"] },
+        { name: "Actual", port: 5006, url: "http://127.0.0.1:5006", open: "https://budget.daoseeking.duckdns.org:8443", containers: ["actual"] },
+        { name: "Home Assistant", port: 8123, url: "http://127.0.0.1:8123", open: "https://home.daoseeking.duckdns.org:8443", containers: ["homeassistant"] },
+        { name: "Uptime Kuma", port: 3001, url: "http://127.0.0.1:3001", open: "https://status.daoseeking.duckdns.org:8443", containers: ["uptime-kuma"] },
+        { name: "AdGuard", port: 3080, url: "http://192.168.1.216:3080", open: "https://adguard.daoseeking.duckdns.org:8443", containers: ["adguard"] }
     ]
     property var status: ({})   // name -> { up: bool, ms: int }
     property var usage: ({})    // container -> { cpu: %, mem: MiB }, from ~/homelab/widget/stats.sh
@@ -94,7 +97,7 @@ PlasmoidItem {
     }
 
     fullRepresentation: ColumnLayout {
-        Layout.minimumWidth: Kirigami.Units.gridUnit * 28
+        Layout.minimumWidth: Kirigami.Units.gridUnit * 42
         Layout.minimumHeight: Kirigami.Units.gridUnit * 8
         spacing: Kirigami.Units.smallSpacing
 
@@ -105,8 +108,8 @@ PlasmoidItem {
         }
 
         GridLayout {
-            columns: 2
-            rows: Math.ceil(root.services.length / 2)
+            columns: 3
+            rows: Math.ceil(root.services.length / 3)
             flow: GridLayout.TopToBottom
             columnSpacing: Kirigami.Units.largeSpacing
             rowSpacing: 0
