@@ -1,0 +1,22 @@
+title: DaoSeeking Homelab
+description: Self-hosted services on the desktop
+theme: dark
+color: slate
+headerStyle: clean
+statusStyle: dot
+hideVersion: true
+useEqualHeights: true
+target: _blank
+layout:
+  Media:
+    style: row
+    columns: 3
+  Downloads:
+    style: row
+    columns: 3
+  Home:
+    style: row
+    columns: 3
+  Infrastructure:
+    style: row
+    columns: 3

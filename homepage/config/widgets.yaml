@@ -1,0 +1,21 @@
+- resources:
+    label: CPU / RAM
+    cpu: true
+    memory: true
+    cputemp: true
+    uptime: true
+- resources:
+    label: Main (/home)
+    disk: /
+- resources:
+    label: d1
+    disk: /mnt/d1
+- resources:
+    label: d2
+    disk: /mnt/d2
+- datetime:
+    text_size: xl
+    format:
+      dateStyle: long
+      timeStyle: short
+      hour12: false

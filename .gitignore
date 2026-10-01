@@ -21,3 +21,4 @@ actual/data/
 uptime-kuma/data/
 homeassistant/config/
 arr/_broken-*/
+homepage/config/logs/

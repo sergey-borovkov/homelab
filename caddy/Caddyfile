@@ -81,6 +81,11 @@
 		respond @outside "LAN only" 403
 		reverse_proxy 127.0.0.1:3001
 	}
+	@dash host dash.daoseeking.duckdns.org
+	handle @dash {
+		respond @outside "LAN only" 403
+		reverse_proxy 127.0.0.1:3002
+	}
 	@budget host budget.daoseeking.duckdns.org
 	handle @budget {
 		reverse_proxy 127.0.0.1:5006
