@@ -17,7 +17,7 @@ docker run -d --name ryot-db --network ryot --restart unless-stopped \
   postgres:18-alpine
 
 docker run -d --name ryot --network ryot --restart unless-stopped \
-  -p 8000:8000 \
+  -p 127.0.0.1:8000:8000 \
   -e DATABASE_URL="postgres://postgres:$POSTGRES_PASSWORD@ryot-db:5432/postgres" \
   -e SERVER_ADMIN_ACCESS_TOKEN="$SERVER_ADMIN_ACCESS_TOKEN" \
   -e MOVIES_AND_SHOWS_TMDB_ACCESS_TOKEN="${MOVIES_AND_SHOWS_TMDB_ACCESS_TOKEN:-}" \

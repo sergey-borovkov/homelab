@@ -6,7 +6,7 @@ cd "$(dirname "$0")"
 docker pull ghcr.io/shokoanime/server:latest
 docker rm -f shoko 2>/dev/null || true
 docker run -d --name shoko --restart unless-stopped --shm-size 256m \
-  -p 8111:8111 \
+  -p 127.0.0.1:8111:8111 \
   -e PUID=1000 -e PGID=1000 -e TZ=Asia/Tbilisi \
   -v "$PWD/config:/home/shoko/.shoko" \
   -v /home/sergey/data/d1/anime:/home/sergey/data/d1/anime:ro \

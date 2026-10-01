@@ -24,7 +24,7 @@ for _ in $(seq 1 30); do
 done
 
 docker run -d --name bookorbit-app --network bookorbit --restart unless-stopped --init \
-  -p 3000:3000 \
+  -p 127.0.0.1:3000:3000 \
   -e NODE_ENV=production -e PORT=3000 \
   -e POSTGRES_HOST=postgres -e POSTGRES_PORT=5432 \
   -e POSTGRES_USER -e POSTGRES_PASSWORD -e POSTGRES_DB \
