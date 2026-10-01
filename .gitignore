@@ -22,3 +22,5 @@ uptime-kuma/data/
 homeassistant/config/
 arr/_broken-*/
 homepage/config/logs/
+tinyauth/data/
+diun/data/

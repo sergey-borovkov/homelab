@@ -153,3 +153,13 @@
         container: duckdns
         server: local
         description: Keeps daoseeking.duckdns.org pointed home
+    - Tinyauth:
+        icon: tinyauth.png
+        container: tinyauth
+        server: local
+        description: Login page for dash from outside (30-day cookie)
+    - Diun:
+        icon: diun.png
+        container: diun
+        server: local
+        description: Weekly image update check → Telegram (Sat 10:00)

@@ -83,11 +83,17 @@
 	}
 	@dash host dash.daoseeking.duckdns.org
 	handle @dash {
-		# Public, but outside the LAN behind a login (1Password: "Homepage dashboard (homelab)")
-		basic_auth @outside {
-			sergey $2a$14$OVW1tGf8MH.ORgzLjFDbOOVD1uOYvl9oTkw39j6SPmFJLueuEOApq
+		# Public, but outside the LAN behind Tinyauth (login page + 30-day cookie; works in iOS home-screen apps,
+		# which never show HTTP basic-auth prompts). Login = 1Password "Homepage dashboard (homelab)".
+		forward_auth @outside 127.0.0.1:3010 {
+			uri /api/auth/caddy
+			copy_headers Remote-User
 		}
 		reverse_proxy 127.0.0.1:3002
+	}
+	@auth host auth.daoseeking.duckdns.org
+	handle @auth {
+		reverse_proxy 127.0.0.1:3010
 	}
 	@budget host budget.daoseeking.duckdns.org
 	handle @budget {
