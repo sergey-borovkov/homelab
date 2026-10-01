@@ -163,3 +163,11 @@
         container: diun
         server: local
         description: Weekly image update check → Telegram (Sat 10:00)
+    - healthchecks.io:
+        icon: healthchecks.png
+        href: https://healthchecks.io/projects/
+        description: Outside watchdog — alerts if this PC stops pinging (PC/internet down)
+        widget:
+          type: healthchecks
+          url: https://healthchecks.io
+          key: "{{HOMEPAGE_VAR_HC_KEY}}"

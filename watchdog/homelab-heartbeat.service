@@ -1,0 +1,7 @@
+[Unit]
+Description=Heartbeat ping to healthchecks.io
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/homelab/watchdog/ping.sh
