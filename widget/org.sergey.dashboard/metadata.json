@@ -1,0 +1,12 @@
+{
+    "KPlugin": {
+        "Id": "org.sergey.dashboard",
+        "Name": "Homelab Dashboard",
+        "Description": "Homepage dashboard without browser chrome",
+        "Icon": "view-grid",
+        "Authors": [{ "Name": "sergey" }],
+        "Version": "1.0"
+    },
+    "KPackageStructure": "Plasma/Applet",
+    "X-Plasma-API-Minimum-Version": "6.0"
+}
