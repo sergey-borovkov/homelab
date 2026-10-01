@@ -11,4 +11,5 @@ docker run -d --name shoko --restart unless-stopped --shm-size 256m \
   -v "$PWD/config:/home/shoko/.shoko" \
   -v /home/sergey/data/d1/anime:/home/sergey/data/d1/anime:ro \
   -v /home/sergey/Videos:/home/sergey/Videos:ro \
+  -v /home/sergey/data/d2/media/anime:/home/sergey/data/d2/media/anime:ro \
   ghcr.io/shokoanime/server:latest
