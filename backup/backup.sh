@@ -38,7 +38,6 @@ tar -C "$H/arr" -czf "$OUT/arr.tgz" --exclude='*/logs' --exclude='*/logs.db*' --
   qbittorrent prowlarr sonarr radarr bazarr seerr 2>/dev/null || true
 # root-owned app data -> read via the containers
 docker exec actual tar -C / -czf - data > "$OUT/actual.tgz"
-docker exec mealie tar -C /app -czf - data > "$OUT/mealie.tgz"
 docker exec uptime-kuma tar -C /app -czf - --exclude='data/screenshots' data > "$OUT/uptime-kuma.tgz"
 docker exec homeassistant tar -C / -czf - --exclude='config/home-assistant_v2.db*' --exclude='config/*.log*' \
   --exclude='config/deps' --exclude='config/tts' config > "$OUT/homeassistant.tgz"

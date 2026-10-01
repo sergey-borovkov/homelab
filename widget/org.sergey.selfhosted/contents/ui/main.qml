@@ -23,7 +23,6 @@ PlasmoidItem {
         { name: "BookOrbit", port: 3000, url: "http://127.0.0.1:3000", open: "https://books.daoseeking.duckdns.org:8443", containers: ["bookorbit-app","bookorbit-db"] },
         { name: "Ryot", port: 8000, url: "http://127.0.0.1:8000", open: "https://ryot.daoseeking.duckdns.org:8443", containers: ["ryot","ryot-db"] },
         { name: "Vaultwarden", port: 8222, url: "http://127.0.0.1:8222/alive", open: "https://vault.daoseeking.duckdns.org:8443", containers: ["vaultwarden"] },
-        { name: "Mealie", port: 9925, url: "http://127.0.0.1:9925/api/app/about", open: "https://meals.daoseeking.duckdns.org:8443", containers: ["mealie"] },
         { name: "Actual", port: 5006, url: "http://127.0.0.1:5006", open: "https://budget.daoseeking.duckdns.org:8443", containers: ["actual"] },
         { name: "Home Assistant", port: 8123, url: "http://127.0.0.1:8123", open: "https://home.daoseeking.duckdns.org:8443", containers: ["homeassistant"] },
         { name: "Uptime Kuma", port: 3001, url: "http://127.0.0.1:3001", open: "https://status.daoseeking.duckdns.org:8443", containers: ["uptime-kuma"] },

@@ -11,11 +11,6 @@ def cook(name, mode, icon):
                            'confirmation': {'text': f'Start {name}? Rice and water must be in the pot.'}}}
 cfg = {'title': 'Home', 'views': [{'title': 'Xiaomi', 'path': 'home', 'icon': 'mdi:rice', 'type': 'sections', 'max_columns': 3, 'sections': [
   {'type': 'grid', 'cards': [
-    {'type': 'heading', 'heading': 'Shopping & meals', 'icon': 'mdi:cart'},
-    {'type': 'todo-list', 'entity': 'todo.mealie_shopping', 'title': 'Shopping list', 'grid_options': {'columns': 'full'}},
-    {'type': 'calendar', 'initial_view': 'listWeek', 'title': 'Meal plan', 'grid_options': {'columns': 'full'},
-     'entities': ['calendar.mealie_breakfast', 'calendar.mealie_lunch', 'calendar.mealie_dinner']}]},
-  {'type': 'grid', 'cards': [
     {'type': 'heading', 'heading': 'Rice cooker', 'icon': 'mdi:rice'},
     {'type': 'tile', 'entity': f'sensor.{C}_status_p_2_1', 'name': 'Status', 'grid_options': {'columns': 6}},
     {'type': 'tile', 'entity': f'sensor.{C}_left_time_p_3_3', 'name': 'Time left', 'grid_options': {'columns': 6}},
