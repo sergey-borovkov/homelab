@@ -26,7 +26,8 @@ PlasmoidItem {
         { name: "Actual", port: 5006, url: "http://127.0.0.1:5006", open: "https://budget.daoseeking.duckdns.org:8443", containers: ["actual"] },
         { name: "Home Assistant", port: 8123, url: "http://127.0.0.1:8123", open: "https://home.daoseeking.duckdns.org:8443", containers: ["homeassistant"] },
         { name: "Uptime Kuma", port: 3001, url: "http://127.0.0.1:3001", open: "https://status.daoseeking.duckdns.org:8443", containers: ["uptime-kuma"] },
-        { name: "AdGuard", port: 3080, url: "http://192.168.1.216:3080", open: "https://adguard.daoseeking.duckdns.org:8443", containers: ["adguard"] }
+        { name: "AdGuard", port: 3080, url: "http://192.168.1.216:3080", open: "https://adguard.daoseeking.duckdns.org:8443", containers: ["adguard"] },
+        { name: "Dashboard", port: 3002, url: "http://127.0.0.1:3002", open: "https://dash.daoseeking.duckdns.org:8443", containers: ["homepage"] }
     ]
     property var status: ({})   // name -> { up: bool, ms: int }
     property var usage: ({})    // container -> { cpu: %, mem: MiB }, from ~/homelab/widget/stats.sh
