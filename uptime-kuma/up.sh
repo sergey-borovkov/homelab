@@ -6,6 +6,6 @@ set -euo pipefail
 cd "$(dirname "$0")"
 docker pull louislam/uptime-kuma:2
 docker rm -f uptime-kuma 2>/dev/null || true
-docker run -d --name uptime-kuma --restart unless-stopped --network host \
+docker run -d --name uptime-kuma --restart unless-stopped --network host --add-host jellyfin.daoseeking.duckdns.org:192.168.1.216 \
   -e TZ=Asia/Tbilisi -e UPTIME_KUMA_HOST=127.0.0.1 -e UPTIME_KUMA_PORT=3001 \
   -v "$PWD/data:/app/data" louislam/uptime-kuma:2
