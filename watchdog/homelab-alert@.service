@@ -1,0 +1,6 @@
+[Unit]
+Description=Telegram alert: %i failed
+
+[Service]
+Type=oneshot
+ExecStart=%h/homelab/watchdog/tg.sh "❌ %i failed on the home PC. Check: journalctl --user -u %i"

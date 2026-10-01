@@ -1,5 +1,6 @@
 [Unit]
 Description=Nightly homelab backup to d2 (+ git mirror on d1)
+OnFailure=homelab-alert@%n.service
 
 [Service]
 Type=oneshot

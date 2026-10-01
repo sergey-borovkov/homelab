@@ -4,4 +4,5 @@ After=network-online.target
 
 [Service]
 Type=oneshot
+ExecStart=-%h/homelab/watchdog/disk-check.sh
 ExecStart=%h/homelab/watchdog/ping.sh
