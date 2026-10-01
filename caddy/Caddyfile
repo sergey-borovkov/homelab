@@ -99,6 +99,11 @@
 	handle @budget {
 		reverse_proxy 127.0.0.1:5006
 	}
+	@meals host meals.daoseeking.duckdns.org
+	handle @meals {
+		# Public: Mealie has its own login, sign-up only via invite link (wife uses it on her phone)
+		reverse_proxy 127.0.0.1:9925
+	}
 	@home host home.daoseeking.duckdns.org
 	handle @home {
 		respond @outside "LAN only" 403

@@ -9,7 +9,12 @@ def cook(name, mode, icon):
             'tap_action': {'action': 'perform-action', 'perform_action': 'notify.send_message',
                            'target': {'entity_id': f'notify.{C}_start_cook_a_2_1'}, 'data': {'message': str(mode)},
                            'confirmation': {'text': f'Start {name}? Rice and water must be in the pot.'}}}
-cfg = {'title': 'Xiaomi', 'views': [{'title': 'Xiaomi', 'path': 'home', 'icon': 'mdi:rice', 'type': 'sections', 'max_columns': 3, 'sections': [
+cfg = {'title': 'Home', 'views': [{'title': 'Xiaomi', 'path': 'home', 'icon': 'mdi:rice', 'type': 'sections', 'max_columns': 3, 'sections': [
+  {'type': 'grid', 'cards': [
+    {'type': 'heading', 'heading': 'Shopping & meals', 'icon': 'mdi:cart'},
+    {'type': 'todo-list', 'entity': 'todo.mealie_shopping', 'title': 'Shopping list', 'grid_options': {'columns': 'full'}},
+    {'type': 'calendar', 'initial_view': 'listWeek', 'title': 'Meal plan', 'grid_options': {'columns': 'full'},
+     'entities': ['calendar.mealie_breakfast', 'calendar.mealie_lunch', 'calendar.mealie_dinner']}]},
   {'type': 'grid', 'cards': [
     {'type': 'heading', 'heading': 'Rice cooker', 'icon': 'mdi:rice'},
     {'type': 'tile', 'entity': f'sensor.{C}_status_p_2_1', 'name': 'Status', 'grid_options': {'columns': 6}},
@@ -61,7 +66,9 @@ async def main():
                 r = await call({'type': 'config/device_registry/update', 'device_id': d['id'], 'name_by_user': NAMES[d['name']]})
                 print('renamed', d['name'], '->', NAMES[d['name']], r['success'])
         if not any(x['url_path'] == 'xiaomi-home' for x in (await call({'type': 'lovelace/dashboards/list'}))['result']):
-            r = await call({'type': 'lovelace/dashboards/create', 'url_path': 'xiaomi-home', 'title': 'Xiaomi', 'icon': 'mdi:rice',
+            r = await call({'type': 'lovelace/dashboards/create', 'url_path': 'xiaomi-home', 'title': 'Home', 'icon': 'mdi:rice',
                             'show_in_sidebar': True, 'require_admin': False, 'mode': 'storage'}); print('dashboard', r['success'], r.get('error'))
+        dash = next(x for x in (await call({'type': 'lovelace/dashboards/list'}))['result'] if x['url_path'] == 'xiaomi-home')
+        await call({'type': 'lovelace/dashboards/update', 'dashboard_id': dash['id'], 'title': 'Home', 'icon': 'mdi:home'})
         r = await call({'type': 'lovelace/config/save', 'url_path': 'xiaomi-home', 'config': cfg}); print('config saved', r['success'], r.get('error'))
 asyncio.run(main())

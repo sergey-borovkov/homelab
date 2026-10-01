@@ -111,6 +111,17 @@
               label: vacuum battery
             - state: sensor.chunmi_cn_830836452_cmwy3_status_p_2_1
               label: rice cooker
+    - Mealie:
+        icon: mealie.png
+        href: https://meals.daoseeking.duckdns.org:8443
+        container: mealie
+        server: local
+        description: Recipes, meal plan, shared shopping list
+        widget:
+          type: mealie
+          url: http://127.0.0.1:9925
+          key: "{{HOMEPAGE_VAR_MEALIE}}"
+          version: 2
     - Actual Budget:
         icon: actual-budget.png
         href: https://budget.daoseeking.duckdns.org:8443
