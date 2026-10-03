@@ -2,7 +2,7 @@
 # Lets this PC use a Tailscale exit node without breaking the homelab: these rules run before
 # Tailscale's (pref 5270, "lookup 52" = everything via the exit node) and keep on the home ISP:
 #   - the LAN and Docker networks (container port forwarding),
-#   - the VPS itself (otherwise it loops through its own tunnel),
+#   - the VPS itself (otherwise it loops through its own tunnel) and AdGuard's DNS upstreams,
 #   - replies from the LAN IP (outside visitors on :8443 -> Caddy),
 #   - everything containers send (qBittorrent must never leave via Oracle).
 # Desktop apps (browser, Steam, ...) go through the exit node as intended.
@@ -13,6 +13,7 @@ rules=(
   "to 192.168.1.0/24"
   "to 172.16.0.0/12"
   "to 204.216.220.169"
+  "to 1.1.1.1" "to 1.0.0.1" "to 9.9.9.9"   # AdGuard's upstreams: LAN DNS must not depend on the VPS
   "from 192.168.1.216"
   "from 172.16.0.0/12"
 )
