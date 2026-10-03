@@ -1,0 +1,69 @@
+# Securo personal finance (adapted from upstream docker-compose.prod.yml). RUNS ON THE VPS:
+# https://finance.daoseeking.uk . Own login (admin made via the setup API; registration off). Fed by
+# ~/work/ynab-bog-tbc (securo mirror). Secrets in .env. DB in the securo-db volume.
+x-backend-env: &backend-env
+  DATABASE_URL: postgresql+asyncpg://postgres:${POSTGRES_PASSWORD}@securo-db:5432/securo
+  SECRET_KEY: ${SECRET_KEY}
+  FRONTEND_URL: https://finance.daoseeking.uk
+  REDIS_URL: redis://securo-redis:6379/0
+  TRUSTED_PROXY_HOPS: "2"   # Caddy -> bundled nginx -> backend
+  REGISTRATION_ENABLED: "false"
+  OPENEXCHANGERATES_APP_ID: ${OPENEXCHANGERATES_APP_ID}
+  STORAGE_LOCAL_PATH: /app/data/attachments
+  TZ: Asia/Tbilisi
+
+x-backend: &backend
+  image: ghcr.io/securo-finance/securo-backend:latest
+  restart: unless-stopped
+  environment: *backend-env
+  depends_on:
+    securo-db: { condition: service_healthy }
+    securo-redis: { condition: service_healthy }
+  volumes: [securo-attachments:/app/data/attachments]
+
+services:
+  securo-redis:
+    container_name: securo-redis
+    image: redis:8-alpine
+    restart: unless-stopped
+    healthcheck: { test: ["CMD", "redis-cli", "ping"], interval: 5s, retries: 10 }
+
+  securo-db:
+    container_name: securo-db
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: securo
+    volumes: [securo-db:/var/lib/postgresql/data]
+    healthcheck: { test: ["CMD", "pg_isready", "-U", "postgres"], interval: 2s, retries: 30 }
+
+  securo-backend:
+    <<: *backend
+    container_name: securo-backend
+    command: sh -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000"
+
+  securo-worker:
+    <<: *backend
+    container_name: securo-worker
+    command: celery -A app.worker worker --loglevel=info --concurrency=2
+
+  securo-beat:
+    <<: *backend
+    container_name: securo-beat
+    command: celery -A app.worker beat --loglevel=info
+
+  securo:
+    container_name: securo
+    image: ghcr.io/securo-finance/securo-frontend:latest
+    restart: unless-stopped
+    depends_on: [securo-backend]
+    ports: ["127.0.0.1:3010:8080"]
+    environment:
+      BACKEND_URL: http://securo-backend:8000
+      FRONTEND_URL: https://finance.daoseeking.uk
+
+volumes:
+  securo-db: { name: securo-db }
+  securo-attachments: { name: securo-attachments }

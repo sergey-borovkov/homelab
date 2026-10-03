@@ -110,11 +110,16 @@
               label: vacuum battery
             - state: sensor.chunmi_cn_830836452_cmwy3_status_p_2_1
               label: rice cooker
+    - Securo:
+        icon: mdi-finance
+        href: https://finance.daoseeking.uk
+        siteMonitor: https://finance.daoseeking.uk/
+        description: Finances from bank statements (YNAB replacement) (on the VPS)
     - Actual Budget:
         icon: actual-budget.png
         href: https://budget.daoseeking.uk
         siteMonitor: https://budget.daoseeking.uk/
-        description: Budget (YNAB replacement) (on the VPS)
+        description: Budget, mirrored from YNAB (superseded by Securo) (on the VPS)
     - Vaultwarden:
         icon: vaultwarden.png
         href: https://vault.daoseeking.uk

@@ -37,6 +37,9 @@ ryot.daoseeking.uk {
 status.daoseeking.uk {
 	reverse_proxy 127.0.0.1:3001
 }
+finance.daoseeking.uk {
+	reverse_proxy 127.0.0.1:3010
+}
 
 # Personal page (~/homelab/site, static)
 daoseeking.uk {

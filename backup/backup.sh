@@ -59,6 +59,7 @@ ssh vps 'sudo tar -C homelab/vaultwarden/data -czf - --ignore-failed-read rsa_ke
 ssh vps docker exec ryot-db pg_dump -U postgres -Fc postgres > "$OUT/ryot.pgdump"
 ssh vps docker exec actual tar -C / -czf - data > "$OUT/actual.tgz"
 ssh vps docker exec zipline-db pg_dump -U zipline -Fc zipline > "$OUT/zipline.pgdump"
+ssh vps docker exec securo-db pg_dump -U postgres -Fc securo > "$OUT/securo.pgdump"
 ssh vps docker exec uptime-kuma tar -C /app -czf - --exclude=data/screenshots data > "$OUT/uptime-kuma.tgz"
 
 # Off-site: encrypted, deduplicated restic snapshot on the VPS. Password: backup/.env + 1Password

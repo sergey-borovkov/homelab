@@ -6,7 +6,7 @@ front door live on the VPS. No Kubernetes: every service is one `up.sh` you can 
 `docker run` for single containers and a `compose.yaml` for the multi-container stacks.
 
 - **Media**: Jellyfin with an automated request → download → library pipeline, anime-aware.
-- **Personal**: password manager, budget, media tracker, ebook library, file sharing / pastes.
+- **Personal**: password manager, finances, media tracker, ebook library, file sharing / pastes.
 - **Home**: Home Assistant, ad-blocking DNS.
 - **Ops**: HTTPS reverse proxies, uptime monitoring from inside and outside, nightly local + off-site
   backups, update and disk alerts, monthly access audit, all reporting to one Telegram bot; Tailscale VPN.
@@ -20,7 +20,7 @@ flowchart LR
   phone -. "Tailscale: <app>.ts.daoseeking.uk" .-> caddy
 
   subgraph VPS [Oracle VPS, Milan]
-    vcaddy[Caddy] --> vapps[Vaultwarden · Actual · Ryot<br/>Zipline · Uptime Kuma outside]
+    vcaddy[Caddy] --> vapps[Vaultwarden · Securo · Actual · Ryot<br/>Zipline · Uptime Kuma outside]
     ts[Tailscale exit node]
   end
   vcaddy -- "front door: Jellyfin · Seerr<br/>BookOrbit · dashboard" --> router
@@ -61,6 +61,7 @@ flowchart LR
 | **On the VPS** | | |
 | [`vps`](vps) | VPS base setup (firewall, Docker + Compose, auto security updates, Tailscale exit node) and its **Caddy** | — |
 | [`zipline`](zipline/compose.yaml) | **Zipline**: file sharing, text pastes and short links with expiring URLs (+ Postgres); own login, no sign-ups | public |
+| [`securo`](securo/compose.yaml) | **Securo**: personal finance in native currencies, fed from TBC/BoG statements by `~/work/ynab-bog-tbc` (`ynab-import securo`); live FX via Open Exchange Rates (+ Postgres, Redis, Celery); own login, no sign-ups | public |
 | [`uptime-kuma`](uptime-kuma/up.sh) | **Uptime Kuma**: every public URL from outside (both paths), the VPS apps, and the LAN-only home tools over Tailscale, 60 s probes → Telegram | own login |
 | **At home** | | |
 | [`jellyfin`](jellyfin/up.sh) | **Jellyfin** media server, with plugins for Shoko anime metadata, intro skipping and Seerr/Sonarr integration | public |
@@ -88,7 +89,7 @@ flowchart LR
 ```
 
 Single-container services are plain `docker run`; the stacks with a database or several apps (`arr`,
-`bookorbit`, `zipline`, `ryot`) are a `compose.yaml`, and their `up.sh` is `docker compose up -d --pull always`,
+`bookorbit`, `zipline`, `ryot`, `securo`) are a `compose.yaml`, and their `up.sh` is `docker compose up -d --pull always`,
 which restarts only what changed. Either way: ports bound to `127.0.0.1` (Caddy is the only thing listening
 outside), `--restart unless-stopped`, data in a gitignored folder next to the script or in a named volume. VPS
 folders are rsynced to `vps:~/homelab` and run there (`ssh vps ~/homelab/<service>/up.sh`); base setup is
