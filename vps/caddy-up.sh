@@ -7,6 +7,6 @@ cd "$(dirname "$0")"
 docker pull caddy:2
 docker rm -f caddy 2>/dev/null || true
 docker run -d --name caddy --restart unless-stopped --network host \
-  -v "$PWD:/etc/caddy:ro" \
+  -v "$PWD:/etc/caddy:ro" -v "$PWD/../site:/srv/site:ro" \
   -v caddy-data:/data -v caddy-config:/config \
   caddy:2

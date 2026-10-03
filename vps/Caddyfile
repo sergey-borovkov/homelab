@@ -37,3 +37,13 @@ ryot.daoseeking.uk {
 status.daoseeking.uk {
 	reverse_proxy 127.0.0.1:3001
 }
+
+# Personal page (~/homelab/site, static)
+daoseeking.uk {
+	root * /srv/site
+	encode zstd gzip
+	file_server
+}
+www.daoseeking.uk {
+	redir https://daoseeking.uk{uri} permanent
+}
