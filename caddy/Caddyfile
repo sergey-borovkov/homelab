@@ -8,6 +8,10 @@
 {
 	admin 127.0.0.1:2019
 	acme_dns duckdns {env.TOKEN}
+	# The VPS front door forwards visitors here; trust its X-Forwarded-For so client_ip is the real visitor
+	servers {
+		trusted_proxies static 204.216.220.169
+	}
 }
 
 *.daoseeking.duckdns.org, *.daoseeking.duckdns.org:8443 {
@@ -106,6 +110,105 @@
 	}
 	@home host home.daoseeking.duckdns.org
 	handle @home {
+		respond @outside "LAN only" 403
+		reverse_proxy 127.0.0.1:8123
+	}
+	handle {
+		abort
+	}
+}
+
+# daoseeking.uk (Cloudflare DNS, cert via DNS-01 with the token in ~/homelab/ddns/.env):
+#   <app>.home.daoseeking.uk[:8443]  direct to this PC (*.home follows our IP via ~/homelab/ddns)
+#   <app>.daoseeking.uk              same public apps through the VPS front door (~/homelab/vps/Caddyfile);
+#                                    on the LAN AdGuard answers them with this PC so streams stay local
+#   <app>.ts.daoseeking.uk           admin tools over Tailscale (DNS -> this PC's tailnet IP)
+*.daoseeking.uk, *.home.daoseeking.uk, *.home.daoseeking.uk:8443, *.ts.daoseeking.uk {
+	tls {
+		dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+	}
+	log {
+		output file /var/log/caddy/access.log {
+			roll_size 10MiB
+			roll_keep 50
+			roll_keep_for 1080h
+			mode 0644
+		}
+		format json
+	}
+	@lan client_ip 192.168.1.0/24 127.0.0.1/8 172.16.0.0/12 100.64.0.0/10
+	log_skip @lan
+	@outside not client_ip 192.168.1.0/24 127.0.0.1/8 100.64.0.0/10
+
+	# Public apps (own logins)
+	@books host books.daoseeking.uk books.home.daoseeking.uk
+	handle @books {
+		reverse_proxy 127.0.0.1:3000
+	}
+	@jellyfin host jellyfin.daoseeking.uk jellyfin.home.daoseeking.uk
+	handle @jellyfin {
+		reverse_proxy 127.0.0.1:8096
+	}
+	@requests host requests.daoseeking.uk requests.home.daoseeking.uk
+	handle @requests {
+		reverse_proxy 127.0.0.1:5055
+	}
+	@auth host auth.daoseeking.uk auth.home.daoseeking.uk
+	handle @auth {
+		reverse_proxy 127.0.0.1:3010
+	}
+	@dash host dash.daoseeking.uk dash.home.daoseeking.uk dash.ts.daoseeking.uk
+	handle @dash {
+		forward_auth @outside 127.0.0.1:3010 {
+			uri /api/auth/caddy
+			copy_headers Remote-User
+		}
+		reverse_proxy 127.0.0.1:3002
+	}
+
+	# Admin tools: LAN / Tailscale only
+	@adguard host adguard.home.daoseeking.uk adguard.ts.daoseeking.uk
+	handle @adguard {
+		respond @outside "LAN only" 403
+		reverse_proxy 192.168.1.216:3080
+	}
+	@sonarr host sonarr.home.daoseeking.uk sonarr.ts.daoseeking.uk
+	handle @sonarr {
+		respond @outside "LAN only" 403
+		reverse_proxy 127.0.0.1:8989
+	}
+	@radarr host radarr.home.daoseeking.uk radarr.ts.daoseeking.uk
+	handle @radarr {
+		respond @outside "LAN only" 403
+		reverse_proxy 127.0.0.1:7878
+	}
+	@prowlarr host prowlarr.home.daoseeking.uk prowlarr.ts.daoseeking.uk
+	handle @prowlarr {
+		respond @outside "LAN only" 403
+		reverse_proxy 127.0.0.1:9696
+	}
+	@qbit host qbit.home.daoseeking.uk qbit.ts.daoseeking.uk
+	handle @qbit {
+		respond @outside "LAN only" 403
+		reverse_proxy 127.0.0.1:8090
+	}
+	@bazarr host bazarr.home.daoseeking.uk bazarr.ts.daoseeking.uk
+	handle @bazarr {
+		respond @outside "LAN only" 403
+		reverse_proxy 127.0.0.1:6767
+	}
+	@shoko host shoko.home.daoseeking.uk shoko.ts.daoseeking.uk
+	handle @shoko {
+		respond @outside "LAN only" 403
+		reverse_proxy 127.0.0.1:8111
+	}
+	@status host status.home.daoseeking.uk status.ts.daoseeking.uk
+	handle @status {
+		respond @outside "LAN only" 403
+		reverse_proxy 127.0.0.1:3001
+	}
+	@ha host ha.home.daoseeking.uk ha.ts.daoseeking.uk
+	handle @ha {
 		respond @outside "LAN only" 403
 		reverse_proxy 127.0.0.1:8123
 	}

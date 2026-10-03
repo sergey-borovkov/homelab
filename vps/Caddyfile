@@ -1,0 +1,22 @@
+# VPS Caddy: certs per host via HTTP-01 (ports 80/443 are open here, unlike at home).
+# Front door: public home apps keep their own name and are forwarded to home Caddy over the direct path
+# (<app>.home.daoseeking.uk:8443, router forward). Admin tools are not forwarded at all.
+(home) {
+	reverse_proxy https://{args[0]}.home.daoseeking.uk:8443
+}
+
+books.daoseeking.uk {
+	import home books
+}
+jellyfin.daoseeking.uk {
+	import home jellyfin
+}
+requests.daoseeking.uk {
+	import home requests
+}
+auth.daoseeking.uk {
+	import home auth
+}
+dash.daoseeking.uk {
+	import home dash
+}
