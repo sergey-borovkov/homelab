@@ -2,12 +2,12 @@ import QtQuick
 import QtWebEngine
 import org.kde.plasma.plasmoid
 
-// Shows the Homepage dashboard (https://dash.daoseeking.duckdns.org:8443) with no address bar.
+// Shows the Homepage dashboard (https://dash.daoseeking.uk) with no address bar.
 // Links open in the default browser instead of inside the widget.
 PlasmoidItem {
     id: root
     preferredRepresentation: fullRepresentation
-    readonly property url home: "https://dash.daoseeking.duckdns.org:8443/"
+    readonly property url home: "https://dash.daoseeking.uk/"
 
     fullRepresentation: WebEngineView {
         id: view

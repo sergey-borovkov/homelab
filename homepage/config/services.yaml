@@ -2,7 +2,7 @@
 - Media:
     - Jellyfin:
         icon: jellyfin.png
-        href: https://jellyfin.daoseeking.duckdns.org:8443
+        href: https://jellyfin.daoseeking.uk
         siteMonitor: http://127.0.0.1:8096/health
         description: Movies, shows, anime
         widget:
@@ -15,7 +15,7 @@
           showEpisodeNumber: true
     - Seerr:
         icon: seerr.png
-        href: https://requests.daoseeking.duckdns.org:8443
+        href: https://requests.daoseeking.uk
         container: seerr
         server: local
         description: Request movies & shows
@@ -25,26 +25,25 @@
           key: "{{HOMEPAGE_VAR_SEERR}}"
     - Shoko:
         icon: shoko.png
-        href: https://shoko.daoseeking.duckdns.org:8443/webui
+        href: https://shoko.home.daoseeking.uk/webui
         container: shoko
         server: local
         description: Anime metadata (AniDB)
     - Ryot:
         icon: ryot.png
-        href: https://ryot.daoseeking.duckdns.org:8443
-        container: ryot
-        server: local
-        description: What we watched / read
+        href: https://ryot.daoseeking.uk
+        siteMonitor: https://ryot.daoseeking.uk
+        description: What we watched / read (on the VPS)
     - BookOrbit:
         icon: bookorbit.png
-        href: https://books.daoseeking.duckdns.org:8443
+        href: https://books.daoseeking.uk
         container: bookorbit-app
         server: local
         description: Books & manga
 - Downloads:
     - Sonarr:
         icon: sonarr.png
-        href: https://sonarr.daoseeking.duckdns.org:8443
+        href: https://sonarr.home.daoseeking.uk
         container: sonarr
         server: local
         widget:
@@ -53,7 +52,7 @@
           key: "{{HOMEPAGE_VAR_SONARR}}"
     - Radarr:
         icon: radarr.png
-        href: https://radarr.daoseeking.duckdns.org:8443
+        href: https://radarr.home.daoseeking.uk
         container: radarr
         server: local
         widget:
@@ -62,7 +61,7 @@
           key: "{{HOMEPAGE_VAR_RADARR}}"
     - qBittorrent:
         icon: qbittorrent.png
-        href: https://qbit.daoseeking.duckdns.org:8443
+        href: https://qbit.home.daoseeking.uk
         container: qbittorrent
         server: local
         widget:
@@ -73,7 +72,7 @@
           enableLeechProgress: true
     - Prowlarr:
         icon: prowlarr.png
-        href: https://prowlarr.daoseeking.duckdns.org:8443
+        href: https://prowlarr.home.daoseeking.uk
         container: prowlarr
         server: local
         widget:
@@ -82,7 +81,7 @@
           key: "{{HOMEPAGE_VAR_PROWLARR}}"
     - Bazarr:
         icon: bazarr.png
-        href: https://bazarr.daoseeking.duckdns.org:8443
+        href: https://bazarr.home.daoseeking.uk
         container: bazarr
         server: local
         widget:
@@ -97,7 +96,7 @@
 - Home:
     - Home Assistant:
         icon: home-assistant.png
-        href: https://home.daoseeking.duckdns.org:8443
+        href: https://ha.home.daoseeking.uk
         container: homeassistant
         server: local
         widget:
@@ -113,20 +112,18 @@
               label: rice cooker
     - Actual Budget:
         icon: actual-budget.png
-        href: https://budget.daoseeking.duckdns.org:8443
-        container: actual
-        server: local
-        description: Budget (YNAB replacement)
+        href: https://budget.daoseeking.uk
+        siteMonitor: https://budget.daoseeking.uk/
+        description: Budget (YNAB replacement) (on the VPS)
     - Vaultwarden:
         icon: vaultwarden.png
-        href: https://vault.daoseeking.duckdns.org:8443
-        container: vaultwarden
-        server: local
-        description: Passwords
+        href: https://vault.daoseeking.uk
+        siteMonitor: https://vault.daoseeking.uk/alive
+        description: Passwords (on the VPS)
 - Infrastructure:
     - AdGuard Home:
         icon: adguard-home.png
-        href: https://adguard.daoseeking.duckdns.org:8443
+        href: https://adguard.home.daoseeking.uk
         container: adguard
         server: local
         widget:
@@ -138,16 +135,31 @@
         icon: caddy.png
         container: caddy
         server: local
-        description: HTTPS reverse proxy (*.daoseeking.duckdns.org:8443)
+        description: HTTPS reverse proxy (*.home / *.ts / front-door names of daoseeking.uk)
         widget:
           type: caddy
           url: http://127.0.0.1:2019
     - Uptime Kuma:
         icon: uptime-kuma.png
-        href: https://status.daoseeking.duckdns.org:8443
+        href: https://status.home.daoseeking.uk
         container: uptime-kuma
         server: local
-        description: Monitors → Telegram (DaoSeeking Robot)
+        description: Home checks (LAN tools) → Telegram
+    - Uptime Kuma (VPS):
+        icon: uptime-kuma.png
+        href: https://status.daoseeking.uk
+        siteMonitor: https://status.daoseeking.uk
+        description: Outside checks of every public URL → Telegram
+    - MicroBin:
+        icon: mdi-share-variant
+        href: https://share.daoseeking.uk
+        siteMonitor: https://share.daoseeking.uk
+        description: Pastes + file sharing (on the VPS)
+    - Cloudflare DDNS:
+        icon: cloudflare.png
+        container: ddns
+        server: local
+        description: Keeps *.home.daoseeking.uk pointed home
     - DuckDNS:
         icon: duckdns.png
         container: duckdns
