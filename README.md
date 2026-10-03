@@ -60,7 +60,7 @@ flowchart LR
 | **On the VPS** | | |
 | [`vps`](vps) | VPS base setup (firewall, Docker, auto security updates, Tailscale exit node) and its **Caddy** | — |
 | [`microbin`](microbin/up.sh) | **MicroBin**: pastes with syntax highlighting + file sharing with expiring links; only I can upload | public |
-| [`vps/kuma-up.sh`](vps/kuma-up.sh) | second **Uptime Kuma**: every public URL checked from outside, both paths | own login |
+| [`uptime-kuma`](uptime-kuma/up.sh) | **Uptime Kuma**: every public URL from outside (both paths), the VPS apps, and the LAN-only home tools over Tailscale, 60 s probes → Telegram | own login |
 | **At home** | | |
 | [`jellyfin`](jellyfin/up.sh) | **Jellyfin** media server, with plugins for Shoko anime metadata, intro skipping and Seerr/Sonarr integration | public |
 | [`arr`](arr/up.sh) | **Seerr** requests, **Sonarr/Radarr** TV and movies, **Prowlarr** indexers (+ FlareSolverr), **Bazarr** subtitles (en + ru), **qBittorrent** | Seerr public, rest LAN |
@@ -73,7 +73,6 @@ flowchart LR
 | [`duckdns`](duckdns/up.sh) | keeps the old DuckDNS name pointed home, until it's retired | — |
 | [`tinyauth`](tinyauth/up.sh) | **Tinyauth** login in front of the dashboard (basic auth doesn't work in iOS home-screen apps) | public login page |
 | [`homepage`](homepage/config/services.yaml) | **Homepage** dashboard with live widgets for every service | Tinyauth |
-| [`uptime-kuma`](uptime-kuma/up.sh) | **Uptime Kuma**: probes every home service each minute, alerts to Telegram | LAN |
 | [`diun`](diun/up.sh) | **Diun**: weekly "new image available" notices (updating stays manual) | — |
 | [`watchdog`](watchdog) | heartbeat to healthchecks.io, disk-space alerts, failure alerts, [monthly access audit](watchdog/audit.sh) | — |
 | [`backup`](backup/backup.sh) | nightly backup of every app's database and config | — |
@@ -103,8 +102,8 @@ an Uptime Kuma monitor and a line in `backup/backup.sh`.
 
 | Question | Answered by |
 |---|---|
-| Is a service down? | Uptime Kuma at home (LAN tools) and on the VPS (every public URL from outside), 60 s probes → Telegram |
-| Is the whole PC or the internet down? | a systemd timer pings healthchecks.io every 5 min; silence → email + Telegram |
+| Is a service down? | Uptime Kuma on the VPS: public URLs from outside, home tools over Tailscale (red while the desktop is on the work tailnet), 60 s probes → Telegram |
+| Is the whole PC, the VPS or the internet down? | the PC (systemd timer) and the VPS (cron) each ping their own healthchecks.io check every 5 min; silence → email + Telegram |
 | Is a disk filling up? | `watchdog/disk-check.sh` → Telegram at 99 % |
 | Are there new versions? | Diun, weekly → Telegram; then re-run that `up.sh` |
 | Can I restore? | `backup/backup.sh` nightly at 04:00: SQLite via the online backup API, `pg_dump` for Postgres, configs, `.env` files and a git bundle, the VPS apps pulled over ssh; kept 14 days on a second drive **and** as encrypted restic snapshots on the VPS (14 daily, 8 weekly, 6 monthly; password in 1Password); a failed run alerts to Telegram |

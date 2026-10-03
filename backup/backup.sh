@@ -31,7 +31,6 @@ tar -C "$H/arr" -czf "$OUT/arr.tgz" --exclude='*/logs' --exclude='*/logs.db*' --
   --exclude='*/Backups' --exclude='*/cache' --exclude='*/log' --exclude='*/backup' \
   qbittorrent prowlarr sonarr radarr bazarr seerr 2>/dev/null || true
 # root-owned app data -> read via the containers
-docker exec uptime-kuma tar -C /app -czf - --exclude='data/screenshots' data > "$OUT/uptime-kuma.tgz"
 docker exec homeassistant tar -C / -czf - --exclude='config/home-assistant_v2.db*' --exclude='config/*.log*' \
   --exclude='config/deps' --exclude='config/tts' config > "$OUT/homeassistant.tgz"
 # Jellyfin: DB (users, watch history), plugin configs, server config. metadata/ and Shokofin VFS are rebuildable.
@@ -59,7 +58,7 @@ ssh vps 'sudo tar -C homelab/vaultwarden/data -czf - --ignore-failed-read rsa_ke
   > "$OUT/vaultwarden-files.tgz" 2>/dev/null
 ssh vps docker exec ryot-db pg_dump -U postgres -Fc postgres > "$OUT/ryot.pgdump"
 ssh vps docker exec actual tar -C / -czf - data > "$OUT/actual.tgz"
-ssh vps docker exec uptime-kuma tar -C /app -czf - --exclude=data/screenshots data > "$OUT/uptime-kuma-vps.tgz"
+ssh vps docker exec uptime-kuma tar -C /app -czf - --exclude=data/screenshots data > "$OUT/uptime-kuma.tgz"
 
 # Off-site: encrypted, deduplicated restic snapshot on the VPS. Password: backup/.env + 1Password
 # "Restic homelab backup".

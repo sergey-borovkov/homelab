@@ -141,15 +141,9 @@
           url: http://127.0.0.1:2019
     - Uptime Kuma:
         icon: uptime-kuma.png
-        href: https://status.home.daoseeking.uk
-        container: uptime-kuma
-        server: local
-        description: Home checks (LAN tools) → Telegram
-    - Uptime Kuma (VPS):
-        icon: uptime-kuma.png
         href: https://status.daoseeking.uk
         siteMonitor: https://status.daoseeking.uk
-        description: Outside checks of every public URL → Telegram
+        description: On the VPS: public URLs from outside + home tools over Tailscale → Telegram
     - MicroBin:
         icon: mdi-share-variant
         href: https://share.daoseeking.uk

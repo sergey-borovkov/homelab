@@ -22,7 +22,6 @@ PlasmoidItem {
         { name: "Shoko", port: 8111, url: "http://127.0.0.1:8111", open: "https://shoko.home.daoseeking.uk/webui", containers: ["shoko"] },
         { name: "BookOrbit", port: 3000, url: "http://127.0.0.1:3000", open: "https://books.daoseeking.uk", containers: ["bookorbit-app","bookorbit-db"] },
         { name: "Home Assistant", port: 8123, url: "http://127.0.0.1:8123", open: "https://ha.home.daoseeking.uk", containers: ["homeassistant"] },
-        { name: "Uptime Kuma", port: 3001, url: "http://127.0.0.1:3001", open: "https://status.home.daoseeking.uk", containers: ["uptime-kuma"] },
         { name: "AdGuard", port: 3080, url: "http://192.168.1.216:3080", open: "https://adguard.home.daoseeking.uk", containers: ["adguard"] },
         { name: "Dashboard", port: 3002, url: "http://127.0.0.1:3002", open: "https://dash.daoseeking.uk", containers: ["homepage"] }
     ]

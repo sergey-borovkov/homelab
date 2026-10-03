@@ -93,8 +93,8 @@
 	}
 	@status host status.daoseeking.duckdns.org
 	handle @status {
-		respond @outside "LAN only" 403
-		reverse_proxy 127.0.0.1:3001
+		# Uptime Kuma moved to the VPS (status.daoseeking.uk)
+		redir https://status.daoseeking.uk{uri}
 	}
 	@dash host dash.daoseeking.duckdns.org
 	handle @dash {
@@ -210,11 +210,6 @@
 	handle @shoko {
 		respond @outside "LAN only" 403
 		reverse_proxy 127.0.0.1:8111
-	}
-	@status host status.home.daoseeking.uk status.ts.daoseeking.uk
-	handle @status {
-		respond @outside "LAN only" 403
-		reverse_proxy 127.0.0.1:3001
 	}
 	@ha host ha.home.daoseeking.uk ha.ts.daoseeking.uk
 	handle @ha {

@@ -31,3 +31,7 @@ EOF
 command -v tailscale >/dev/null || curl -fsSL https://tailscale.com/install.sh | sh
 printf 'net.ipv4.ip_forward = 1\nnet.ipv6.conf.all.forwarding = 1\n' > /etc/sysctl.d/99-tailscale.conf
 sysctl -q -p /etc/sysctl.d/99-tailscale.conf
+
+# Heartbeat to healthchecks.io ("vps" check, URL in ~/homelab/vps/.env): silence > 15 min -> email + Telegram
+echo '*/5 * * * * ubuntu . /home/ubuntu/homelab/vps/.env && curl -fsS -m 10 --retry 5 -o /dev/null "$HC_PING_URL"' \
+  > /etc/cron.d/homelab-heartbeat
