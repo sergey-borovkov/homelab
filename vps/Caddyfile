@@ -23,9 +23,6 @@ dash.daoseeking.uk {
 
 # Apps running on the VPS itself
 share.daoseeking.uk {
-	# TEMPORARY until the admin account exists (Zipline's first visitor becomes admin): home IP + tailnet only
-	@notme not remote_ip 92.54.231.149 100.64.0.0/10 204.216.220.169 10.0.0.0/24 172.16.0.0/12
-	respond @notme "Not yet" 403
 	reverse_proxy 127.0.0.1:3005
 }
 vault.daoseeking.uk {
