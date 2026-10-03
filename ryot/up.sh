@@ -1,27 +1,5 @@
 #!/usr/bin/env bash
-# Ryot + Postgres via plain docker run. RUNS ON THE VPS: https://ryot.daoseeking.uk (old duckdns URL forwarded by home Caddy)
-# Re-run to update: pulls latest v10 images and recreates containers; data stays in the ryot-db volume.
+# Stack in compose.yaml. Re-run to update: pulls images, restarts only containers whose image or config changed.
 set -euo pipefail
 cd "$(dirname "$0")"
-source .env
-
-docker network inspect ryot >/dev/null 2>&1 || docker network create ryot
-docker pull postgres:18-alpine
-docker pull ghcr.io/ignisda/ryot:v10
-docker rm -f ryot ryot-db 2>/dev/null || true
-
-docker run -d --name ryot-db --network ryot --restart unless-stopped \
-  -e POSTGRES_DB=postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD="$POSTGRES_PASSWORD" \
-  -e TZ=Asia/Tbilisi \
-  -v ryot-db:/var/lib/postgresql \
-  postgres:18-alpine
-
-docker run -d --name ryot --network ryot --restart unless-stopped \
-  -p 127.0.0.1:8000:8000 \
-  -e DATABASE_URL="postgres://postgres:$POSTGRES_PASSWORD@ryot-db:5432/postgres" \
-  -e SERVER_ADMIN_ACCESS_TOKEN="$SERVER_ADMIN_ACCESS_TOKEN" \
-  -e MOVIES_AND_SHOWS_TMDB_ACCESS_TOKEN="${MOVIES_AND_SHOWS_TMDB_ACCESS_TOKEN:-}" \
-  -e USERS_ALLOW_REGISTRATION=false \
-  -e FRONTEND_URL=https://ryot.daoseeking.uk \
-  -e TZ=Asia/Tbilisi \
-  ghcr.io/ignisda/ryot:v10
+docker compose up -d --pull always

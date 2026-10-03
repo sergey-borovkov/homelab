@@ -18,7 +18,7 @@ for u in docker tailscaled; do systemctl -q is-active $u && systemctl restart $u
 
 apt-get update -q
 apt-get -yq upgrade
-apt-get install -yq docker.io git
+apt-get install -yq docker.io docker-compose-v2 git
 usermod -aG docker ubuntu
 
 # Security updates already install daily (image default); reboot at 05:00 when one needs it

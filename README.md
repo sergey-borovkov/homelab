@@ -2,7 +2,8 @@
 
 A home lab on my everyday desktop plus one free Oracle Cloud VPS: about 20 self-hosted services as Docker
 containers. Media and anything that needs the disks or the LAN stays home; small always-on apps and the public
-front door live on the VPS. No Kubernetes, no Compose: every service is one `up.sh` script you can read in a minute.
+front door live on the VPS. No Kubernetes: every service is one `up.sh` you can read in a minute, plain
+`docker run` for single containers and a `compose.yaml` for the multi-container stacks.
 
 - **Media**: Jellyfin with an automated request → download → library pipeline, anime-aware.
 - **Personal**: password manager, budget, media tracker, ebook library, file sharing / pastes.
@@ -58,14 +59,14 @@ flowchart LR
 | Folder | Service | Reachable |
 |---|---|---|
 | **On the VPS** | | |
-| [`vps`](vps) | VPS base setup (firewall, Docker, auto security updates, Tailscale exit node) and its **Caddy** | — |
-| [`zipline`](zipline/up.sh) | **Zipline**: file sharing, text pastes and short links with expiring URLs (+ Postgres); own login, no sign-ups | public |
+| [`vps`](vps) | VPS base setup (firewall, Docker + Compose, auto security updates, Tailscale exit node) and its **Caddy** | — |
+| [`zipline`](zipline/compose.yaml) | **Zipline**: file sharing, text pastes and short links with expiring URLs (+ Postgres); own login, no sign-ups | public |
 | [`uptime-kuma`](uptime-kuma/up.sh) | **Uptime Kuma**: every public URL from outside (both paths), the VPS apps, and the LAN-only home tools over Tailscale, 60 s probes → Telegram | own login |
 | **At home** | | |
 | [`jellyfin`](jellyfin/up.sh) | **Jellyfin** media server, with plugins for Shoko anime metadata, intro skipping and Seerr/Sonarr integration | public |
-| [`arr`](arr/up.sh) | **Seerr** requests, **Sonarr/Radarr** TV and movies, **Prowlarr** indexers (+ FlareSolverr), **Bazarr** subtitles (en + ru), **qBittorrent** | Seerr public, rest LAN |
+| [`arr`](arr/compose.yaml) | **Seerr** requests, **Sonarr/Radarr** TV and movies, **Prowlarr** indexers (+ FlareSolverr), **Bazarr** subtitles (en + ru), **qBittorrent** | Seerr public, rest LAN |
 | [`shoko`](shoko/up.sh) | **Shoko Server**: identifies anime files by hash against AniDB, feeds Jellyfin through Shokofin | LAN |
-| [`bookorbit`](bookorbit/up.sh) | **BookOrbit** ebook / manga library (+ pgvector Postgres) | public |
+| [`bookorbit`](bookorbit/compose.yaml) | **BookOrbit** ebook / manga library (+ pgvector Postgres) | public |
 | [`homeassistant`](homeassistant/up.sh) | **Home Assistant**, plus [`dashboard.py`](homeassistant/dashboard.py) that generates its dashboard | LAN |
 | [`adguard`](adguard/up.sh) | **AdGuard Home**: LAN DNS + ad blocking, local answers for the homelab names | LAN |
 | [`caddy`](caddy/Caddyfile) | **Caddy** reverse proxy, custom build with the Cloudflare (+ DuckDNS) DNS modules | — |
@@ -86,16 +87,18 @@ flowchart LR
 ./<service>/up.sh        # pull, recreate, start; re-run to update
 ```
 
-Each script is plain `docker run`: ports bound to `127.0.0.1` (Caddy is the only thing listening outside),
-`--restart unless-stopped`, data in a gitignored folder next to the script or in a named volume. VPS folders
-are rsynced to `vps:~/homelab` and run there (`ssh vps ~/homelab/<service>/up.sh`); base setup is
+Single-container services are plain `docker run`; the stacks with a database or several apps (`arr`,
+`bookorbit`, `zipline`, `ryot`) are a `compose.yaml`, and their `up.sh` is `docker compose up -d --pull always`,
+which restarts only what changed. Either way: ports bound to `127.0.0.1` (Caddy is the only thing listening
+outside), `--restart unless-stopped`, data in a gitignored folder next to the script or in a named volume. VPS
+folders are rsynced to `vps:~/homelab` and run there (`ssh vps ~/homelab/<service>/up.sh`); base setup is
 `ssh vps 'sudo bash -s' < vps/setup.sh`.
 
 **Secrets** never enter git. Each service reads `<service>/.env` (gitignored), and `.env.example` lists the
 keys it needs. The history is checked with [gitleaks](https://github.com/gitleaks/gitleaks) before pushing.
 
-**Adding a service:** copy the closest `up.sh`, bind its port to `127.0.0.1`, add a host block to the
-Caddyfile (with `respond @outside "LAN only" 403` unless the app has its own login), then add a Homepage entry,
+**Adding a service:** copy the closest `up.sh` (or `compose.yaml`), bind its port to `127.0.0.1`, add a host
+block to the Caddyfile (with `respond @outside "LAN only" 403` unless the app has its own login), then add a Homepage entry,
 an Uptime Kuma monitor and a line in `backup/backup.sh`.
 
 ## Keeping it alive

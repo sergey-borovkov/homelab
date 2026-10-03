@@ -1,0 +1,30 @@
+# Ryot + Postgres. RUNS ON THE VPS: https://ryot.daoseeking.uk (old duckdns URL forwarded by home Caddy)
+# Pinned to v10 images; data stays in the ryot-db volume. Secrets in .env.
+services:
+  ryot-db:
+    container_name: ryot-db
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      TZ: Asia/Tbilisi
+    volumes: [ryot-db:/var/lib/postgresql]
+
+  ryot:
+    container_name: ryot
+    image: ghcr.io/ignisda/ryot:v10
+    restart: unless-stopped
+    depends_on: [ryot-db]
+    ports: ["127.0.0.1:8000:8000"]
+    environment:
+      DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@ryot-db:5432/postgres
+      SERVER_ADMIN_ACCESS_TOKEN: ${SERVER_ADMIN_ACCESS_TOKEN}
+      MOVIES_AND_SHOWS_TMDB_ACCESS_TOKEN: ${MOVIES_AND_SHOWS_TMDB_ACCESS_TOKEN:-}
+      USERS_ALLOW_REGISTRATION: "false"
+      FRONTEND_URL: https://ryot.daoseeking.uk
+      TZ: Asia/Tbilisi
+
+volumes:
+  ryot-db: { name: ryot-db }   # fixed name: compose would otherwise prefix it with the project

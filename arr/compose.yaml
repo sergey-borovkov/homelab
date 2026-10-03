@@ -1,0 +1,58 @@
+# *arr media automation: qBittorrent (headless) + Prowlarr + Sonarr + Radarr + Bazarr + Seerr.
+# Media lives on d2 and is mounted at the SAME path in every container (no path mapping):
+#   /home/sergey/data/d2/media/{downloads,tv,movies,anime}  (one filesystem -> hardlinks, no copies)
+# Configs in ./<app> (gitignored, backed up).
+x-lsio: &lsio
+  restart: unless-stopped
+  environment: &lsio-env
+    PUID: "1000"
+    PGID: "1000"
+    TZ: Asia/Tbilisi
+    UMASK: "002"
+
+services:
+  qbittorrent:
+    <<: *lsio
+    container_name: qbittorrent
+    image: lscr.io/linuxserver/qbittorrent:latest
+    environment: { <<: *lsio-env, WEBUI_PORT: "8090", TORRENTING_PORT: "6881" }
+    ports: ["127.0.0.1:8090:8090", "6881:6881", "6881:6881/udp"]
+    volumes: [./qbittorrent:/config, /home/sergey/data/d2/media:/home/sergey/data/d2/media]
+  prowlarr:
+    <<: *lsio
+    container_name: prowlarr
+    image: lscr.io/linuxserver/prowlarr:latest
+    ports: ["127.0.0.1:9696:9696"]
+    volumes: [./prowlarr:/config]
+  sonarr:
+    <<: *lsio
+    container_name: sonarr
+    image: lscr.io/linuxserver/sonarr:latest
+    ports: ["127.0.0.1:8989:8989"]
+    volumes: [./sonarr:/config, /home/sergey/data/d2/media:/home/sergey/data/d2/media]
+  radarr:
+    <<: *lsio
+    container_name: radarr
+    image: lscr.io/linuxserver/radarr:latest
+    ports: ["127.0.0.1:7878:7878"]
+    volumes: [./radarr:/config, /home/sergey/data/d2/media:/home/sergey/data/d2/media]
+  bazarr:
+    <<: *lsio
+    container_name: bazarr
+    image: lscr.io/linuxserver/bazarr:latest
+    ports: ["127.0.0.1:6767:6767"]
+    volumes: [./bazarr:/config, /home/sergey/data/d2/media:/home/sergey/data/d2/media]
+  seerr:
+    container_name: seerr
+    image: ghcr.io/seerr-team/seerr:latest
+    restart: unless-stopped
+    init: true
+    environment: { TZ: Asia/Tbilisi }
+    ports: ["127.0.0.1:5055:5055"]
+    volumes: [./seerr:/app/config]
+  # Solves Cloudflare challenges for Prowlarr (EZTV, 1337x). Only reachable inside the stack's network.
+  flaresolverr:
+    container_name: flaresolverr
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    restart: unless-stopped
+    environment: { TZ: Asia/Tbilisi }

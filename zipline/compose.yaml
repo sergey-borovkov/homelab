@@ -1,0 +1,40 @@
+# Zipline (files, text pastes, short links; expiring links) + Postgres. RUNS ON THE VPS:
+# https://share.daoseeking.uk . Own login (first visit created the admin; registration stays off).
+# Uploads in ./uploads (throwaway shares, not backed up), DB in the zipline-db volume. Secrets in .env.
+services:
+  zipline-db:
+    container_name: zipline-db
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: zipline
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: zipline
+    volumes: [zipline-db:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "zipline"]
+      interval: 2s
+      retries: 30
+
+  zipline:
+    container_name: zipline
+    image: ghcr.io/diced/zipline:latest
+    restart: unless-stopped
+    depends_on: { zipline-db: { condition: service_healthy } }
+    ports: ["127.0.0.1:3005:3000"]
+    environment:
+      DATABASE_URL: postgres://zipline:${POSTGRES_PASSWORD}@zipline-db:5432/zipline
+      CORE_SECRET: ${CORE_SECRET}
+      CORE_PORT: "3000"
+      CORE_HOSTNAME: 0.0.0.0
+      CORE_TRUST_PROXY: "true"
+      CORE_TRUSTED_PROXIES: 172.16.0.0/12
+      CORE_RETURN_HTTPS_URLS: "true"
+      CORE_DEFAULT_DOMAIN: share.daoseeking.uk
+      DATASOURCE_TYPE: local
+      DATASOURCE_LOCAL_DIRECTORY: /zipline/uploads
+      TZ: Asia/Tbilisi
+    volumes: [./uploads:/zipline/uploads, ./public:/zipline/public]
+
+volumes:
+  zipline-db: { name: zipline-db }   # fixed name: compose would otherwise prefix it with the project
