@@ -5,7 +5,7 @@ containers. Media and anything that needs the disks or the LAN stays home; small
 front door live on the VPS. No Kubernetes, no Compose: every service is one `up.sh` script you can read in a minute.
 
 - **Media**: Jellyfin with an automated request → download → library pipeline, anime-aware.
-- **Personal**: password manager, budget, media tracker, ebook library, pastebin / file sharing.
+- **Personal**: password manager, budget, media tracker, ebook library, file sharing / pastes.
 - **Home**: Home Assistant, ad-blocking DNS.
 - **Ops**: HTTPS reverse proxies, uptime monitoring from inside and outside, nightly local + off-site
   backups, update and disk alerts, monthly access audit, all reporting to one Telegram bot; Tailscale VPN.
@@ -19,7 +19,7 @@ flowchart LR
   phone -. "Tailscale: <app>.ts.daoseeking.uk" .-> caddy
 
   subgraph VPS [Oracle VPS, Milan]
-    vcaddy[Caddy] --> vapps[Vaultwarden · Actual · Ryot<br/>MicroBin · Uptime Kuma outside]
+    vcaddy[Caddy] --> vapps[Vaultwarden · Actual · Ryot<br/>Zipline · Uptime Kuma outside]
     ts[Tailscale exit node]
   end
   vcaddy -- "front door: Jellyfin · Seerr<br/>BookOrbit · dashboard" --> router
@@ -59,7 +59,7 @@ flowchart LR
 |---|---|---|
 | **On the VPS** | | |
 | [`vps`](vps) | VPS base setup (firewall, Docker, auto security updates, Tailscale exit node) and its **Caddy** | — |
-| [`microbin`](microbin/up.sh) | **MicroBin**: pastes with syntax highlighting + file sharing with expiring links; only I can upload | public |
+| [`zipline`](zipline/up.sh) | **Zipline**: file sharing, text pastes and short links with expiring URLs (+ Postgres); own login, no sign-ups | public |
 | [`uptime-kuma`](uptime-kuma/up.sh) | **Uptime Kuma**: every public URL from outside (both paths), the VPS apps, and the LAN-only home tools over Tailscale, 60 s probes → Telegram | own login |
 | **At home** | | |
 | [`jellyfin`](jellyfin/up.sh) | **Jellyfin** media server, with plugins for Shoko anime metadata, intro skipping and Seerr/Sonarr integration | public |

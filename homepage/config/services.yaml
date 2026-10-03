@@ -120,11 +120,11 @@
         href: https://vault.daoseeking.uk
         siteMonitor: https://vault.daoseeking.uk/alive
         description: Passwords (on the VPS)
-    - MicroBin:
-        icon: mdi-share-variant
+    - Zipline:
+        icon: zipline.png
         href: https://share.daoseeking.uk
         siteMonitor: https://share.daoseeking.uk
-        description: Pastes + file sharing (on the VPS)
+        description: Files, pastes, short links (on the VPS)
 - Infrastructure:
     - AdGuard Home:
         icon: adguard-home.png

@@ -51,13 +51,14 @@ git -C "$H" push -q --mirror "$MIRROR"
 find "$DEST" -mindepth 1 -maxdepth 1 -type d -mtime +"$KEEP_DAYS" -exec rm -rf {} +
 
 # Apps on the VPS (~/homelab/vps): pull consistent copies over ssh. After the local steps, so a VPS problem
-# fails the unit (-> Telegram alert) without costing the local copy. MicroBin shares are throwaway: not backed up.
+# fails the unit (-> Telegram alert) without costing the local copy. Zipline: DB only, the shared files are throwaway.
 ssh vps 'sudo python3 - homelab/vaultwarden/data/db.sqlite3 /tmp/vw-backup.sqlite3' <<<"$SQLITE_PY"
 ssh vps 'sudo cat /tmp/vw-backup.sqlite3 && sudo rm /tmp/vw-backup.sqlite3' > "$OUT/vaultwarden-db.sqlite3"
 ssh vps 'sudo tar -C homelab/vaultwarden/data -czf - --ignore-failed-read rsa_key.pem attachments' \
   > "$OUT/vaultwarden-files.tgz" 2>/dev/null
 ssh vps docker exec ryot-db pg_dump -U postgres -Fc postgres > "$OUT/ryot.pgdump"
 ssh vps docker exec actual tar -C / -czf - data > "$OUT/actual.tgz"
+ssh vps docker exec zipline-db pg_dump -U zipline -Fc zipline > "$OUT/zipline.pgdump"
 ssh vps docker exec uptime-kuma tar -C /app -czf - --exclude=data/screenshots data > "$OUT/uptime-kuma.tgz"
 
 # Off-site: encrypted, deduplicated restic snapshot on the VPS. Password: backup/.env + 1Password

@@ -28,7 +28,7 @@ PlasmoidItem {
         { name: "Vaultwarden", port: "VPS", url: "https://vault.daoseeking.uk/alive", open: "https://vault.daoseeking.uk", containers: ["vps/vaultwarden"] },
         { name: "Actual", port: "VPS", url: "https://budget.daoseeking.uk", open: "https://budget.daoseeking.uk", containers: ["vps/actual"] },
         { name: "Ryot", port: "VPS", url: "https://ryot.daoseeking.uk", open: "https://ryot.daoseeking.uk", containers: ["vps/ryot","vps/ryot-db"] },
-        { name: "MicroBin", port: "VPS", url: "https://share.daoseeking.uk", open: "https://share.daoseeking.uk", containers: ["vps/microbin"] },
+        { name: "Zipline", port: "VPS", url: "https://share.daoseeking.uk", open: "https://share.daoseeking.uk", containers: ["vps/zipline","vps/zipline-db"] },
         { name: "Uptime Kuma", port: "VPS", url: "https://status.daoseeking.uk", open: "https://status.daoseeking.uk", containers: ["vps/uptime-kuma"] },
         { name: "Website", port: "VPS", url: "https://daoseeking.uk", open: "https://daoseeking.uk", containers: ["vps/caddy"] }
     ]
