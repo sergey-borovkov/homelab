@@ -8,7 +8,10 @@ x-backend-env: &backend-env
   REDIS_URL: redis://securo-redis:6379/0
   TRUSTED_PROXY_HOPS: "2"   # Caddy -> bundled nginx -> backend
   REGISTRATION_ENABLED: "false"
-  OPENEXCHANGERATES_APP_ID: ${OPENEXCHANGERATES_APP_ID}
+  # Rates come from ~/work/ynab-bog-tbc (NBG, written on each `ynab-import securo`): Securo's own
+  # provider list lacks GEL and burned the free Open Exchange Rates quota. Scheduled mode only
+  # re-stamps rows from the stored rates (with no provider key it never fetches).
+  FX_SYNC_MODE: scheduled
   STORAGE_LOCAL_PATH: /app/data/attachments
   TZ: Asia/Tbilisi
 
