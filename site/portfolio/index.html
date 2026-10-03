@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sergei Borovkov · systems engineer</title>
+<meta name="description" content="Sergei Borovkov: systems engineer (C++, Rust, Python). Nerd who loves programming, tinkering and making things better.">
+<meta name="color-scheme" content="dark light">
+<style>
+:root {
+  --bg: #0b0e0b; --fg: #c3cfbf; --head: #eef6ea; --dim: #75826f; --accent: #e3b45a; --rule: #263024;
+  --glow: 0 0 1px rgba(195, 240, 180, .35), 0 0 6px rgba(150, 220, 140, .12);
+}
+@media (prefers-color-scheme: light) {
+  :root { --bg: #f5f2ea; --fg: #2a2a26; --head: #000; --dim: #77746a; --accent: #8a5a00; --rule: #d9d4c7; --glow: none; }
+}
+* { box-sizing: border-box; }
+html { background: var(--bg); }
+body {
+  margin: 0; padding: 2.5rem 16px 4rem; color: var(--fg); background: var(--bg);
+  font: 15px/1.6 ui-monospace, "JetBrains Mono", "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  text-shadow: var(--glow);
+}
+/* faint CRT scanlines, dark mode only */
+@media (prefers-color-scheme: dark) {
+  body::after {
+    content: ""; position: fixed; inset: 0; pointer-events: none;
+    background: repeating-linear-gradient(to bottom, rgba(0,0,0,.18) 0 1px, transparent 1px 3px);
+  }
+}
+main { max-width: 82ch; margin: 0 auto; }
+.mh { display: flex; justify-content: space-between; gap: 1ch; color: var(--head); font-weight: 700; }
+.mh span:nth-child(2) { font-weight: 400; color: var(--dim); }
+h2 { margin: 2em 0 .4em; font-size: 1em; color: var(--head); letter-spacing: .02em; }
+section > p, section > ul, section > dl, .ind { margin: .4em 0 0 7ch; }
+p { margin: .6em 0 0 7ch; }
+ul { padding: 0; list-style: none; }
+li { position: relative; padding-left: 2ch; margin: .25em 0; }
+li::before { content: "•"; position: absolute; left: 0; color: var(--dim); }
+dl { margin: .4em 0 0 7ch; }
+dt { color: var(--head); font-weight: 700; margin-top: 1em; }
+dt .when { font-weight: 400; color: var(--dim); }
+dd { margin: .3em 0 0 4ch; }
+b { color: var(--head); }
+u { text-decoration-color: var(--dim); text-underline-offset: 3px; }
+a { color: var(--accent); text-decoration: none; }
+a:hover, a:focus-visible { text-decoration: underline; outline: none; }
+.kv { display: grid; grid-template-columns: 12ch 1fr; gap: .2em 1ch; margin: .4em 0 0 7ch; }
+.kv span:nth-child(odd) { color: var(--dim); }
+.cursor { display: inline-block; width: .6em; height: 1.1em; vertical-align: -.2em; background: var(--fg); margin-left: .3ch; }
+@media (prefers-reduced-motion: no-preference) { .cursor { animation: blink 1.1s steps(1) infinite; } }
+@keyframes blink { 50% { opacity: 0; } }
+footer.mh { margin-top: 3em; padding-top: .8em; border-top: 1px solid var(--rule); font-weight: 400; color: var(--dim); }
+footer.mh span:last-child { color: var(--head); font-weight: 700; }
+@media (max-width: 600px) {
+  body { font-size: 14px; padding-top: 1.5rem; }
+  section > p, section > ul, section > dl, p, dl, .kv, .ind { margin-left: 2ch; }
+  dd { margin-left: 2ch; }
+  .mh span:nth-child(2) { display: none; }
+  .kv { grid-template-columns: 1fr; gap: 0; }
+  .kv span:nth-child(even) { margin-bottom: .5em; }
+}
+</style>
+</head>
+<body>
+<main>
+<header class="mh"><span>BOROVKOV(1)</span><span>User Commands</span><span>BOROVKOV(1)</span></header>
+
+<section>
+<h2>NAME</h2>
+<p><b>borovkov</b> — Sergei Borovkov, systems engineer. I solve problems; the language is a detail.</p>
+</section>
+
+<section>
+<h2>SYNOPSIS</h2>
+<p><b>borovkov</b> [<b>--rust</b>] [<b>--c++</b>] [<b>--whatever-it-takes</b>] <u>problem</u> ...<span class="cursor" aria-hidden="true"></span></p>
+</section>
+
+<section>
+<h2>DESCRIPTION</h2>
+<p>Prefer a real shell? <a href="/">daoseeking.uk</a>: the same CV as a Rust TUI (Ratatui), running in your browser as WebAssembly.</p>
+<p>I'm a nerd who has been programming for over thirteen years and still does it for fun after hours.
+Most of that time went into software that runs close to the hardware: video players on fleets of
+Raspberry Pis, embedded Linux images, browser engines on ARM, desktop apps.</p>
+<p>I like taking things apart to see how they work, then putting them back together a bit faster,
+simpler or more reliable than before. Off the clock I tinker: a self-hosted homelab on my desktop
+and a free ARM server (this page is served from it), and Rust side projects.</p>
+<p>I care about the problem more than the tool. Rust is my favourite, C++ I know well, and I pick up
+whatever else the job needs.</p>
+<p>I live in Tbilisi, Georgia, and have worked fully remote since 2015. UTC+4: full overlap with Europe,
+evenings for the US.</p>
+</section>
+
+<section>
+<h2>EXPERIENCE</h2>
+<dl>
+<dt>Screenly — Senior Systems Engineer <span class="when">(2015–present, 10+ years)</span></dt>
+<dd>I built the device layer of a commercial Raspberry Pi digital-signage fleet and owned it solo for most of a decade; now I'm the team's senior engineer.
+<ul>
+<li>Video playback stack in C++/Qt and GStreamer across Pi 3/4/5 and x86, with hardware decoding via OpenMAX IL, V4L2 and VAAPI; fixed the qmlglsink sink upstream.</li>
+<li>Designed the playback state-machine architecture that replaced years of ad-hoc signal logic and its race conditions.</li>
+<li>Ported the web layer from Qt WebKit to WebEngine and migrated the player services from Python to Rust.</li>
+<li>Ubuntu Core images and snaps, device encryption, TPM-backed device identity, hardware watchdogs, and telemetry that survives SD-card wear and power loss; upstreamed snapd and craft-parts fixes.</li>
+<li><a href="https://github.com/Screenly/cli">Screenly/cli</a>: a small public Rust CLI, the first Rust I wrote.</li>
+</ul></dd>
+</dl>
+</section>
+
+<section>
+<h2>ENVIRONMENT</h2>
+<div class="kv">
+<span>LANGUAGES</span><span>Rust (favourite), C++, Python, Bash</span>
+<span>FRAMEWORKS</span><span>Qt/QML, GStreamer, Qt WebEngine, PyO3</span>
+<span>PLATFORMS</span><span>Embedded Linux, Ubuntu Core/snap, buildroot, Raspberry Pi</span>
+<span>TOOLING</span><span>CMake, GitHub Actions, Docker, Linux servers</span>
+</div>
+</section>
+
+<section>
+<h2>AUTHOR</h2>
+<div class="kv">
+<span>email</span><span id="mail">serge.borovkov [at] gmail [dot] com</span>
+<span>github</span><span><a href="https://github.com/sergey-borovkov">github.com/sergey-borovkov</a></span>
+<span>linkedin</span><span><a href="https://www.linkedin.com/in/sergey-borovkov-3b42a238/">in/sergey-borovkov</a></span>
+</div>
+</section>
+
+<section>
+<h2>SEE ALSO</h2>
+<p><a href="https://github.com/Screenly/cli">screenly-cli(1)</a>, <a href="https://github.com/KDE/klook">klook(1)</a>, <a href="https://github.com/sergey-borovkov/homelab">homelab(7)</a></p>
+</section>
+
+<footer class="mh"><span>daoseeking.uk</span><span>October 2026</span><span>BOROVKOV(1)</span></footer>
+</main>
+<script>
+  // assembled at runtime so scrapers don't see the address
+  const u = ["serge", "borovkov"].join("."), d = ["gmail", "com"].join(".");
+  const m = document.getElementById("mail");
+  m.innerHTML = '<a href="mailto:' + u + "@" + d + '">' + u + "@" + d + "</a>";
+</script>
+</body>
+</html>

@@ -40,6 +40,10 @@ status.daoseeking.uk {
 
 # Personal page (~/homelab/site, static)
 daoseeking.uk {
+	# / = the terminal (~/work/borovkov-term, Rust -> WebAssembly), /portfolio/ = the plain CV
+	redir /term* /
+	# same file names every build: always revalidate (ETag), so a new .js never meets an old .wasm
+	header Cache-Control "no-cache"
 	root * /srv/site
 	encode zstd gzip
 	file_server
