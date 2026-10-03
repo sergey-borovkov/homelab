@@ -41,6 +41,10 @@ docker exec actual tar -C / -czf - data > "$OUT/actual.tgz"
 docker exec uptime-kuma tar -C /app -czf - --exclude='data/screenshots' data > "$OUT/uptime-kuma.tgz"
 docker exec homeassistant tar -C / -czf - --exclude='config/home-assistant_v2.db*' --exclude='config/*.log*' \
   --exclude='config/deps' --exclude='config/tts' config > "$OUT/homeassistant.tgz"
+# Jellyfin: DB (users, watch history), plugin configs, server config. metadata/ and Shokofin VFS are rebuildable.
+# ponytail: tar of a live SQLite (+wal) is usually consistent, stop the container first if a restore ever fails
+docker exec jellyfin tar -C / -czf - --exclude='var/lib/jellyfin/metadata' --exclude='var/lib/jellyfin/Shokofin' \
+  var/lib/jellyfin etc/jellyfin > "$OUT/jellyfin.tgz"
 
 # Secrets + config + notes
 tar -C "$H" -czf "$OUT/env-secrets.tgz" $(cd "$H" && ls */.env)
