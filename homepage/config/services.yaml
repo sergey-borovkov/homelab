@@ -120,6 +120,11 @@
         href: https://vault.daoseeking.uk
         siteMonitor: https://vault.daoseeking.uk/alive
         description: Passwords (on the VPS)
+    - MicroBin:
+        icon: mdi-share-variant
+        href: https://share.daoseeking.uk
+        siteMonitor: https://share.daoseeking.uk
+        description: Pastes + file sharing (on the VPS)
 - Infrastructure:
     - AdGuard Home:
         icon: adguard-home.png
@@ -144,11 +149,6 @@
         href: https://status.daoseeking.uk
         siteMonitor: https://status.daoseeking.uk
         description: On the VPS: public URLs from outside + home tools over Tailscale → Telegram
-    - MicroBin:
-        icon: mdi-share-variant
-        href: https://share.daoseeking.uk
-        siteMonitor: https://share.daoseeking.uk
-        description: Pastes + file sharing (on the VPS)
     - Cloudflare DDNS:
         icon: cloudflare.png
         container: ddns

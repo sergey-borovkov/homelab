@@ -23,7 +23,14 @@ PlasmoidItem {
         { name: "BookOrbit", port: 3000, url: "http://127.0.0.1:3000", open: "https://books.daoseeking.uk", containers: ["bookorbit-app","bookorbit-db"] },
         { name: "Home Assistant", port: 8123, url: "http://127.0.0.1:8123", open: "https://ha.home.daoseeking.uk", containers: ["homeassistant"] },
         { name: "AdGuard", port: 3080, url: "http://192.168.1.216:3080", open: "https://adguard.home.daoseeking.uk", containers: ["adguard"] },
-        { name: "Dashboard", port: 3002, url: "http://127.0.0.1:3002", open: "https://dash.daoseeking.uk", containers: ["homepage"] }
+        { name: "Dashboard", port: 3002, url: "http://127.0.0.1:3002", open: "https://dash.daoseeking.uk", containers: ["homepage"] },
+        // on the VPS (port "VPS"; usage comes from the vps/ lines of stats.sh)
+        { name: "Vaultwarden", port: "VPS", url: "https://vault.daoseeking.uk/alive", open: "https://vault.daoseeking.uk", containers: ["vps/vaultwarden"] },
+        { name: "Actual", port: "VPS", url: "https://budget.daoseeking.uk", open: "https://budget.daoseeking.uk", containers: ["vps/actual"] },
+        { name: "Ryot", port: "VPS", url: "https://ryot.daoseeking.uk", open: "https://ryot.daoseeking.uk", containers: ["vps/ryot","vps/ryot-db"] },
+        { name: "MicroBin", port: "VPS", url: "https://share.daoseeking.uk", open: "https://share.daoseeking.uk", containers: ["vps/microbin"] },
+        { name: "Uptime Kuma", port: "VPS", url: "https://status.daoseeking.uk", open: "https://status.daoseeking.uk", containers: ["vps/uptime-kuma"] },
+        { name: "Website", port: "VPS", url: "https://daoseeking.uk", open: "https://daoseeking.uk", containers: ["vps/caddy"] }
     ]
     property var status: ({})   // name -> { up: bool, ms: int }
     property var usage: ({})    // container -> { cpu: %, mem: MiB }, from ~/homelab/widget/stats.sh
@@ -160,7 +167,7 @@ PlasmoidItem {
                             opacity: 0.85
                         }
                         PlasmaComponents.Label {
-                            text: ":" + modelData.port + "  " + (!st ? "…" : st.up ? st.ms + " ms" : "down")
+                            text: (typeof modelData.port === "number" ? ":" + modelData.port : modelData.port) + "  " + (!st ? "…" : st.up ? st.ms + " ms" : "down")
                             color: st && !st.up ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
                             font.pointSize: Kirigami.Theme.smallFont.pointSize
                             opacity: st && st.up ? 0.6 : 1
