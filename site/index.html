@@ -68,22 +68,25 @@ footer.mh span:last-child { color: var(--head); font-weight: 700; }
 
 <section>
 <h2>NAME</h2>
-<p><b>borovkov</b> — Sergei Borovkov, systems engineer. I make things work, then make them work better.</p>
+<p><b>borovkov</b> — Sergei Borovkov, systems engineer. I solve problems; the language is a detail.</p>
 </section>
 
 <section>
 <h2>SYNOPSIS</h2>
-<p><b>borovkov</b> [<b>--c++</b>] [<b>--rust</b>] [<b>--python</b>] [<b>--close-to-the-hardware</b>] <u>problem</u> ...<span class="cursor" aria-hidden="true"></span></p>
+<p><b>borovkov</b> [<b>--rust</b>] [<b>--c++</b>] [<b>--whatever-it-takes</b>] <u>problem</u> ...<span class="cursor" aria-hidden="true"></span></p>
 </section>
 
 <section>
 <h2>DESCRIPTION</h2>
+<p>Prefer a real shell? <a href="/term/">daoseeking.uk/term</a>: the same CV as a Rust TUI (Ratatui), running in your browser as WebAssembly.</p>
 <p>I'm a nerd who has been programming for over thirteen years and still does it for fun after hours.
 Most of that time went into software that runs close to the hardware: video players on fleets of
 Raspberry Pis, embedded Linux images, browser engines on ARM, desktop apps.</p>
 <p>I like taking things apart to see how they work, then putting them back together a bit faster,
 simpler or more reliable than before. Off the clock I tinker: a self-hosted homelab on my desktop
-and a free ARM server (this page is served from it), Rust side projects, and whatever broke this week.</p>
+and a free ARM server (this page is served from it), and Rust side projects.</p>
+<p>I care about the problem more than the tool. Rust is my favourite, C++ I know well, and I pick up
+whatever else the job needs.</p>
 <p>I live in Tbilisi, Georgia, and have worked fully remote since 2015. UTC+4: full overlap with Europe,
 evenings for the US.</p>
 </section>
@@ -98,7 +101,7 @@ evenings for the US.</p>
 <li>Designed the playback state-machine architecture that replaced years of ad-hoc signal logic and its race conditions.</li>
 <li>Ported the web layer from Qt WebKit to WebEngine and migrated the player services from Python to Rust.</li>
 <li>Ubuntu Core images and snaps, device encryption, TPM-backed device identity, hardware watchdogs, and telemetry that survives SD-card wear and power loss; upstreamed snapd and craft-parts fixes.</li>
-<li>Wrote most of <a href="https://github.com/Screenly/cli">Screenly/cli</a>, the company's public Rust CLI.</li>
+<li><a href="https://github.com/Screenly/cli">Screenly/cli</a>: a small public Rust CLI, the first Rust I wrote.</li>
 </ul></dd>
 </dl>
 </section>
@@ -106,20 +109,11 @@ evenings for the US.</p>
 <section>
 <h2>ENVIRONMENT</h2>
 <div class="kv">
-<span>LANGUAGES</span><span>C++, Rust, Python, C#, Bash</span>
+<span>LANGUAGES</span><span>Rust (favourite), C++, Python, Bash</span>
 <span>FRAMEWORKS</span><span>Qt/QML, GStreamer, Qt WebEngine, PyO3</span>
 <span>PLATFORMS</span><span>Embedded Linux, Ubuntu Core/snap, buildroot, Raspberry Pi</span>
-<span>TOOLING</span><span>CMake, GitHub Actions, Docker, way too many self-hosted services</span>
+<span>TOOLING</span><span>CMake, GitHub Actions, Docker, Linux servers</span>
 </div>
-</section>
-
-<section>
-<h2>BUGS</h2>
-<ul>
-<li>Can't leave a slow build or a flaky test alone.</li>
-<li>Self-hosts about twenty services, plus a server whose job is watching the other servers
-(<a href="https://github.com/sergey-borovkov/homelab">proof</a>).</li>
-</ul>
 </section>
 
 <section>

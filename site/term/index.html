@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>borovkov-sh · Sergei Borovkov</title>
+    <meta name="description" content="Sergei Borovkov's CV as a terminal: Ratatui in the browser via Ratzilla (Rust → WebAssembly)." />
+    <style>
+      html, body { margin: 0; height: 100%; background: #0b0e0b; color: #c3cfbf; }
+      body { display: flex; justify-content: center; }
+      pre {
+        font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+        font-size: 15px; line-height: 1.35; margin: 0;
+        text-shadow: 0 0 1px rgba(195, 240, 180, .35), 0 0 6px rgba(150, 220, 140, .12);
+      }
+      body::after {
+        content: ""; position: fixed; inset: 0; pointer-events: none;
+        background: repeating-linear-gradient(to bottom, rgba(0,0,0,.18) 0 1px, transparent 1px 3px);
+      }
+      noscript { padding: 2rem; font-family: monospace; }
+      noscript a { color: #e3b45a; }
+    </style>
+  </head>
+  <body>
+    <script type="module">import init from "./borovkov-term.js"; init();</script>
+    <noscript>This terminal needs JavaScript + WebAssembly. The plain page is at <a href="/">daoseeking.uk</a>.</noscript>
+  </body>
+</html>
