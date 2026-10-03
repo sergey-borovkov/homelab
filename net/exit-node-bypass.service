@@ -1,0 +1,13 @@
+[Unit]
+Description=Keep the homelab off the Tailscale exit node (~/homelab/net/exit-node-bypass.sh)
+After=network-online.target tailscaled.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/home/sergey/homelab/net/exit-node-bypass.sh add
+ExecStop=/home/sergey/homelab/net/exit-node-bypass.sh del
+
+[Install]
+WantedBy=multi-user.target
