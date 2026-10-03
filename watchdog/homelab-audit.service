@@ -1,0 +1,8 @@
+[Unit]
+Description=Monthly homelab access audit (report to Telegram)
+After=network-online.target
+OnFailure=homelab-alert@%n.service
+
+[Service]
+Type=oneshot
+ExecStart=%h/homelab/watchdog/audit.sh

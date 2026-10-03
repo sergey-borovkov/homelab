@@ -21,6 +21,7 @@ docker run -d --name ryot --network ryot --restart unless-stopped \
   -e DATABASE_URL="postgres://postgres:$POSTGRES_PASSWORD@ryot-db:5432/postgres" \
   -e SERVER_ADMIN_ACCESS_TOKEN="$SERVER_ADMIN_ACCESS_TOKEN" \
   -e MOVIES_AND_SHOWS_TMDB_ACCESS_TOKEN="${MOVIES_AND_SHOWS_TMDB_ACCESS_TOKEN:-}" \
+  -e USERS_ALLOW_REGISTRATION=false \
   -e FRONTEND_URL=https://ryot.daoseeking.duckdns.org:8443 \
   -e TZ=Asia/Tbilisi \
   ghcr.io/ignisda/ryot:v10

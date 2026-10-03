@@ -14,11 +14,16 @@
 	log {
 		output file /var/log/caddy/access.log {
 			roll_size 10MiB
-			roll_keep 5
+			roll_keep 50
+			roll_keep_for 1080h
 			mode 0644
 		}
 		format json
 	}
+	# Log only visits from outside (LAN, this PC and docker containers are noise); kept 45 days for the
+	# monthly access audit (~/homelab/watchdog/audit.sh)
+	@lan remote_ip 192.168.1.0/24 127.0.0.1/8 172.16.0.0/12
+	log_skip @lan
 	@books host books.daoseeking.duckdns.org
 	handle @books {
 		reverse_proxy 127.0.0.1:3000

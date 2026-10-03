@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Homepage dashboard (gethomepage.dev). Host network so widgets reach 127.0.0.1 services; bound to 127.0.0.1:3002,
-# served by Caddy at https://dash.daoseeking.duckdns.org:8443 (LAN only). Secrets: .env (HOMEPAGE_VAR_*).
+# served by Caddy at https://dash.daoseeking.duckdns.org:8443 (outside: Tinyauth login). Secrets: .env (HOMEPAGE_VAR_*).
 set -euo pipefail
 cd "$(dirname "$0")"
 docker pull ghcr.io/gethomepage/homepage:latest

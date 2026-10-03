@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Caddy reverse proxy (host network so it reaches native Jellyfin on localhost:8096).
+# Caddy reverse proxy (host network so it reaches every service on 127.0.0.1).
 # Certs/state live in the caddy-data volume (under /home/docker-data).
 set -euo pipefail
 cd "$(dirname "$0")"
