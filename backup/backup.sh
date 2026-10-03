@@ -12,20 +12,14 @@ umask 077
 mkdir -p "$OUT"
 
 # SQLite: online-consistent copies via the backup API (safe while the apps run)
-sqlite_backup() { python3 - "$1" "$2" <<'PY'
-import sqlite3, sys
+SQLITE_PY='import sqlite3, sys
 src = sqlite3.connect(f"file:{sys.argv[1]}?mode=ro", uri=True); dst = sqlite3.connect(sys.argv[2])
-src.backup(dst); dst.close(); src.close()
-PY
-}
-sqlite_backup "$H/vaultwarden/data/db.sqlite3" "$OUT/vaultwarden-db.sqlite3"
-cp "$H"/vaultwarden/data/rsa_key*.pem "$OUT/" 2>/dev/null || true
-[ -d "$H/vaultwarden/data/attachments" ] && tar -C "$H/vaultwarden/data" -czf "$OUT/vaultwarden-attachments.tgz" attachments
+src.backup(dst); dst.close(); src.close()'
+sqlite_backup() { python3 -c "$SQLITE_PY" "$1" "$2"; }
 sqlite_backup "$H/shoko/config/Shoko.CLI/SQLite/JMMServer.db3" "$OUT/shoko-JMMServer.db3"
 cp "$H/shoko/config/Shoko.CLI/settings-server.json" "$OUT/shoko-settings-server.json"
 
 # Postgres: logical dumps
-docker exec ryot-db pg_dump -U postgres -Fc postgres > "$OUT/ryot.pgdump"
 set -a; . "$H/bookorbit/.env"; set +a
 docker exec bookorbit-db pg_dump -U "$POSTGRES_USER" -Fc "$POSTGRES_DB" > "$OUT/bookorbit.pgdump"
 
@@ -37,7 +31,6 @@ tar -C "$H/arr" -czf "$OUT/arr.tgz" --exclude='*/logs' --exclude='*/logs.db*' --
   --exclude='*/Backups' --exclude='*/cache' --exclude='*/log' --exclude='*/backup' \
   qbittorrent prowlarr sonarr radarr bazarr seerr 2>/dev/null || true
 # root-owned app data -> read via the containers
-docker exec actual tar -C / -czf - data > "$OUT/actual.tgz"
 docker exec uptime-kuma tar -C /app -czf - --exclude='data/screenshots' data > "$OUT/uptime-kuma.tgz"
 docker exec homeassistant tar -C / -czf - --exclude='config/home-assistant_v2.db*' --exclude='config/*.log*' \
   --exclude='config/deps' --exclude='config/tts' config > "$OUT/homeassistant.tgz"
@@ -57,4 +50,21 @@ git -C "$H" push -q --mirror "$MIRROR"
 
 # Rotation
 find "$DEST" -mindepth 1 -maxdepth 1 -type d -mtime +"$KEEP_DAYS" -exec rm -rf {} +
-echo "backup ok: $OUT ($(du -sh "$OUT" | cut -f1))"
+
+# Apps on the VPS (~/homelab/vps): pull consistent copies over ssh. After the local steps, so a VPS problem
+# fails the unit (-> Telegram alert) without costing the local copy. MicroBin shares are throwaway: not backed up.
+ssh vps 'sudo python3 - homelab/vaultwarden/data/db.sqlite3 /tmp/vw-backup.sqlite3' <<<"$SQLITE_PY"
+ssh vps 'sudo cat /tmp/vw-backup.sqlite3 && sudo rm /tmp/vw-backup.sqlite3' > "$OUT/vaultwarden-db.sqlite3"
+ssh vps 'sudo tar -C homelab/vaultwarden/data -czf - --ignore-failed-read rsa_key.pem attachments' \
+  > "$OUT/vaultwarden-files.tgz" 2>/dev/null
+ssh vps docker exec ryot-db pg_dump -U postgres -Fc postgres > "$OUT/ryot.pgdump"
+ssh vps docker exec actual tar -C / -czf - data > "$OUT/actual.tgz"
+ssh vps docker exec uptime-kuma tar -C /app -czf - --exclude=data/screenshots data > "$OUT/uptime-kuma-vps.tgz"
+
+# Off-site: encrypted, deduplicated restic snapshot on the VPS. Password: backup/.env + 1Password
+# "Restic homelab backup".
+set -a; . "$H/backup/.env"; set +a
+export RESTIC_REPOSITORY=sftp:vps:restic
+restic backup -q --host homelab --tag nightly "$OUT"
+restic forget -q --host homelab --group-by host --keep-daily 14 --keep-weekly 8 --keep-monthly 6 --prune
+echo "backup ok: $OUT ($(du -sh "$OUT" | cut -f1)), off-site snapshot on vps"

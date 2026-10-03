@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Ryot + Postgres via plain docker run (no compose plugin installed).
+# Ryot + Postgres via plain docker run. RUNS ON THE VPS: https://ryot.daoseeking.uk (old duckdns URL forwarded by home Caddy)
 # Re-run to update: pulls latest v10 images and recreates containers; data stays in the ryot-db volume.
 set -euo pipefail
 cd "$(dirname "$0")"
@@ -22,6 +22,6 @@ docker run -d --name ryot --network ryot --restart unless-stopped \
   -e SERVER_ADMIN_ACCESS_TOKEN="$SERVER_ADMIN_ACCESS_TOKEN" \
   -e MOVIES_AND_SHOWS_TMDB_ACCESS_TOKEN="${MOVIES_AND_SHOWS_TMDB_ACCESS_TOKEN:-}" \
   -e USERS_ALLOW_REGISTRATION=false \
-  -e FRONTEND_URL=https://ryot.daoseeking.duckdns.org:8443 \
+  -e FRONTEND_URL=https://ryot.daoseeking.uk \
   -e TZ=Asia/Tbilisi \
   ghcr.io/ignisda/ryot:v10

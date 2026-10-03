@@ -20,3 +20,20 @@ auth.daoseeking.uk {
 dash.daoseeking.uk {
 	import home dash
 }
+
+# Apps running on the VPS itself
+share.daoseeking.uk {
+	reverse_proxy 127.0.0.1:8082
+}
+vault.daoseeking.uk {
+	reverse_proxy 127.0.0.1:8222
+}
+budget.daoseeking.uk {
+	reverse_proxy 127.0.0.1:5006
+}
+ryot.daoseeking.uk {
+	reverse_proxy 127.0.0.1:8000
+}
+status.daoseeking.uk {
+	reverse_proxy 127.0.0.1:3001
+}

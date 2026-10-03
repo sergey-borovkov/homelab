@@ -25,7 +25,8 @@ users() { # app users (name list) -> compare with last run
   echo "ryot: $(docker exec ryot-db psql -U postgres -At -c 'select string_agg(name, $$, $$ order by name) from "user"')"
   ( set -a; . "$H/bookorbit/.env"; docker exec bookorbit-db psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -At \
       -c 'select string_agg(username, $$, $$ order by username) from users' ) | sed 's/^/bookorbit: /'
-  echo "vaultwarden: $(python3 -c 'import sqlite3,sys; c=sqlite3.connect(f"file:{sys.argv[1]}?mode=ro",uri=True); print(", ".join(r[0] for r in c.execute("select email from users order by email")))' "$H/vaultwarden/data/db.sqlite3")"
+  # Vaultwarden runs on the VPS
+  echo "vaultwarden: $(ssh vps "sudo python3 -c 'import sqlite3,sys; c=sqlite3.connect(f\"file:{sys.argv[1]}?mode=ro\",uri=True); print(\", \".join(r[0] for r in c.execute(\"select email from users order by email\")))' homelab/vaultwarden/data/db.sqlite3")"
 }
 
 caddy > state/audit-period.jsonl

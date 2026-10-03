@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Actual Budget (YNAB replacement). Public via Caddy: https://budget.daoseeking.duckdns.org:8443
+# Actual Budget (YNAB replacement). RUNS ON THE VPS: https://budget.daoseeking.uk (old duckdns URL forwarded by home Caddy)
 # Data (budgets, server password) in ./data (gitignored, backed up). Re-run to update.
 set -euo pipefail
 cd "$(dirname "$0")"

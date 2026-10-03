@@ -38,11 +38,17 @@
 	}
 	@ryot host ryot.daoseeking.duckdns.org
 	handle @ryot {
-		reverse_proxy 127.0.0.1:8000
+		# moved to the VPS (ryot.daoseeking.uk); old URL kept working until all clients switch
+		reverse_proxy https://ryot.daoseeking.uk {
+			header_up Host ryot.daoseeking.uk
+		}
 	}
 	@vault host vault.daoseeking.duckdns.org
 	handle @vault {
-		reverse_proxy 127.0.0.1:8222
+		# Vaultwarden moved to the VPS (vault.daoseeking.uk); old URL kept working until all clients switch
+		reverse_proxy https://vault.daoseeking.uk {
+			header_up Host vault.daoseeking.uk
+		}
 	}
 	# Admin tools: named, but LAN-only (outside clients get 403)
 	@outside not remote_ip 192.168.1.0/24 127.0.0.1/8
@@ -106,7 +112,10 @@
 	}
 	@budget host budget.daoseeking.duckdns.org
 	handle @budget {
-		reverse_proxy 127.0.0.1:5006
+		# moved to the VPS (budget.daoseeking.uk); old URL kept working until all clients switch
+		reverse_proxy https://budget.daoseeking.uk {
+			header_up Host budget.daoseeking.uk
+		}
 	}
 	@home host home.daoseeking.duckdns.org
 	handle @home {

@@ -25,3 +25,5 @@ homepage/config/logs/
 tinyauth/data/
 diun/data/
 watchdog/state/
+microbin/data/
+vps/kuma-data/
