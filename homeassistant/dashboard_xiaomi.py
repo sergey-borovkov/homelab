@@ -166,13 +166,11 @@ def config(map_attrs, w, h):
         *[{'type': 'tile', 'entity': f'sensor.system_monitor_{k}', 'name': n} for k, n in
           [('processor_use', 'CPU'), ('processor_temperature', 'CPU temp'), ('memory_usage', 'RAM'), ('disk_usage', 'Disk')]]]}]
     details[0]['cards'] += [  # short first column; a 4th section would start below the tallest one
-        {'type': 'heading', 'heading': 'Media & internet', 'icon': 'mdi:television-play'},
+        {'type': 'heading', 'heading': 'Media', 'icon': 'mdi:television-play'},
         {'type': 'tile', 'entity': 'sensor.seerr_pending_requests', 'name': 'Requests to approve', 'icon': 'mdi:inbox-arrow-down'},
         {'type': 'tile', 'entity': 'sensor.sonarr_upcoming', 'name': 'Upcoming episodes'},
         {'type': 'tile', 'entity': 'sensor.qbittorrent_download_speed', 'name': 'Downloading'},
         {'type': 'tile', 'entity': 'switch.qbittorrent_alternative_speed', 'name': 'Slow torrents', 'icon': 'mdi:speedometer-slow'},
-        {'type': 'tile', 'entity': 'sensor.speedtest_download', 'name': 'Speedtest down'},
-        {'type': 'tile', 'entity': 'sensor.speedtest_upload', 'name': 'Speedtest up'},
         {'type': 'calendar', 'entities': ['calendar.sonarr', 'calendar.radarr'], 'initial_view': 'listWeek', 'grid_options': {'columns': 'full'}}]
     return {'title': 'Home', 'views': [
       {'title': 'Home', 'path': 'home', 'icon': 'mdi:home', 'type': 'sections', 'max_columns': 3, 'badges': BADGES, 'sections': home},
