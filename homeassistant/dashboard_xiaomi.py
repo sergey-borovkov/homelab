@@ -74,6 +74,12 @@ def purifier_details(name, P):
       {'entity': f'switch.{P}_physical_controls_locked_p_8_1', 'name': 'Child lock'},
       {'entity': f'select.{P}_brightness_p_13_2', 'name': 'Display brightness'}]}]
 
+# Top row: who's home (phones on Wi-Fi + Companion app), outdoor air, internet
+BADGES = [{'type': 'entity', 'entity': 'person.sergey', 'show_name': True, 'show_icon': True},
+          {'type': 'entity', 'entity': 'person.kristina', 'show_name': True, 'show_icon': True},
+          {'type': 'entity', 'entity': 'sensor.outdoor_aqi', 'name': 'Outdoor AQI', 'show_name': True, 'icon': 'mdi:weather-hazy'},
+          {'type': 'entity', 'entity': 'sensor.outdoor_temperature', 'name': 'Outside', 'show_name': True},
+          {'type': 'entity', 'entity': 'binary_sensor.archer_ax55_wan_status', 'name': 'Internet', 'show_name': True, 'icon': 'mdi:web'}]
 def config(map_attrs, w, h):
     home = [
       {'type': 'grid', 'column_span': 2, 'cards': [
@@ -148,11 +154,19 @@ def config(map_attrs, w, h):
           {'entity': f'sensor.{PB}_pm2_5_density_p_3_4', 'name': 'Bedroom'}, {'entity': f'sensor.{PO}_pm2_5_density_p_3_4', 'name': 'Office'}]},
         {'type': 'history-graph', 'title': 'Humidity', 'hours_to_show': 24, 'entities': [
           {'entity': f'sensor.{PB}_relative_humidity_p_3_1', 'name': 'Bedroom'}, {'entity': f'sensor.{PO}_relative_humidity_p_3_1', 'name': 'Office'}]},
+        {'type': 'heading', 'heading': 'Network', 'icon': 'mdi:router-wireless'},
+        {'type': 'entities', 'entities': [
+          {'entity': 'binary_sensor.archer_ax55_wan_status', 'name': 'Internet'},
+          {'entity': 'sensor.archer_ax55_download_speed', 'name': 'Download now'},
+          {'entity': 'sensor.archer_ax55_upload_speed', 'name': 'Upload now'},
+          {'entity': 'sensor.archer_ax55_external_ip', 'name': 'External IP'},
+          {'entity': 'device_tracker.screenly_player_143', 'name': 'Screenly player .143'},
+          {'entity': 'device_tracker.screenly_player_230', 'name': 'Screenly player .230'}]},
         {'type': 'heading', 'heading': 'Homelab PC', 'icon': 'mdi:server'},
         *[{'type': 'tile', 'entity': f'sensor.system_monitor_{k}', 'name': n} for k, n in
           [('processor_use', 'CPU'), ('processor_temperature', 'CPU temp'), ('memory_usage', 'RAM'), ('disk_usage', 'Disk')]]]}]
     return {'title': 'Home', 'views': [
-      {'title': 'Home', 'path': 'home', 'icon': 'mdi:home', 'type': 'sections', 'max_columns': 3, 'sections': home},
+      {'title': 'Home', 'path': 'home', 'icon': 'mdi:home', 'type': 'sections', 'max_columns': 3, 'badges': BADGES, 'sections': home},
       {'title': 'Details', 'path': 'details', 'icon': 'mdi:tune-variant', 'type': 'sections', 'max_columns': 3, 'sections': details}]}
 
 async def main():
