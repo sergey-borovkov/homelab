@@ -1,5 +1,5 @@
 import asyncio, json, os, aiohttp
-TOKEN=os.environ['HA_TOKEN']; V='vacuum.x50_ultra_complete'; P='x50_ultra_complete'
+V='vacuum.x50_ultra_complete'; P='x50_ultra_complete'
 rooms=[(1,'Primary Bedroom','mdi:bed-king-outline'),(4,'Sergey Cabinet','mdi:desk'),(6,'Kitchen','mdi:stove'),
        (7,'Living Room','mdi:sofa'),(8,"Kristina's Office",'mdi:desk-lamp'),(9,'Corridor','mdi:foot-print'),(3,'Bathroom','mdi:toilet'),(2,'Bathroom 2','mdi:shower')]
 room_btns=[{'type':'button','name':n,'icon':i,'show_state':False,
@@ -46,4 +46,5 @@ async def main():
             r=await call({'type':'lovelace/dashboards/create','url_path':'vacuum-x50','title':'Vacuum','icon':'mdi:robot-vacuum','show_in_sidebar':True,'require_admin':False,'mode':'storage'})
             print('dashboard', r['success'], r.get('error'))
         r=await call({'type':'lovelace/config/save','url_path':'vacuum-x50','config':cfg}); print('config saved', r['success'], r.get('error'))
-asyncio.run(main())
+if __name__ == '__main__':
+    TOKEN=os.environ['HA_TOKEN']; asyncio.run(main())

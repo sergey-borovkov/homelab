@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
-# Home Assistant (container). LAN-only via Caddy: https://home.daoseeking.duckdns.org:8443
+# Home Assistant (container). Public at https://ha.daoseeking.uk (VPS front door; own login + TOTP 2FA, IP ban after 5 fails).
 # Host network (device discovery, Matter/mDNS). Config in ./config (gitignored, backed up).
 # Custom integrations via HACS; Dreame Vacuum (Tasshack) v2 for the Dreame X50 Ultra (Dreamehome account).
+# Xiaomi Home: one entry per region (China: CN-market devices, Singapore: global ones). New devices don't
+# appear on reload/restart: Xiaomi Home entry -> Configure -> "Update devices". Then rerun dashboard_xiaomi.py.
 set -euo pipefail
 cd "$(dirname "$0")"
 docker pull ghcr.io/home-assistant/home-assistant:stable

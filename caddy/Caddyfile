@@ -158,6 +158,11 @@
 	handle @jellyfin {
 		reverse_proxy 127.0.0.1:8096
 	}
+	# Home Assistant: own login with TOTP 2FA; HA bans an IP after 5 failed logins
+	@ha host ha.daoseeking.uk ha.home.daoseeking.uk ha.ts.daoseeking.uk
+	handle @ha {
+		reverse_proxy 127.0.0.1:8123
+	}
 	@requests host requests.daoseeking.uk requests.home.daoseeking.uk
 	handle @requests {
 		reverse_proxy 127.0.0.1:5055
@@ -210,11 +215,6 @@
 	handle @shoko {
 		respond @outside "LAN only" 403
 		reverse_proxy 127.0.0.1:8111
-	}
-	@ha host ha.home.daoseeking.uk ha.ts.daoseeking.uk
-	handle @ha {
-		respond @outside "LAN only" 403
-		reverse_proxy 127.0.0.1:8123
 	}
 	handle {
 		abort

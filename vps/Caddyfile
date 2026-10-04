@@ -20,6 +20,9 @@ auth.daoseeking.uk {
 dash.daoseeking.uk {
 	import home dash
 }
+ha.daoseeking.uk {
+	import home ha
+}
 
 # Apps running on the VPS itself
 share.daoseeking.uk {

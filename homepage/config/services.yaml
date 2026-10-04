@@ -96,7 +96,7 @@
 - Home:
     - Home Assistant:
         icon: home-assistant.png
-        href: https://ha.home.daoseeking.uk
+        href: https://ha.daoseeking.uk
         container: homeassistant
         server: local
         widget:
