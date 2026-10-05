@@ -83,11 +83,11 @@ AUTOS = {
       'then': [purifier_on(P), msg(f'🍳 {r.title()} PM2.5 is {{{{ trigger.to_state.state }}}} µg/m³ (cooking? smoke?), switched its purifier on.')]},
      purifier_auto_unless_sleep(P)]} for r, P in ROOMS.items()]}]},
 
-# UV: morning heads-up on high-UV days (6+ = high on the WHO scale)
-'uv_high': {'alias': 'High UV today', 'mode': 'single', 'description': '9:00 heads-up when today\'s UV index peaks at 6 or more',
+# UV: morning heads-up on extreme-UV days only (9+, ~18 days a year in Tbilisi; 6+ would be every summer day)
+'uv_high': {'alias': 'High UV today', 'mode': 'single', 'description': '9:00 heads-up when today\'s UV index peaks at 9 or more',
   'triggers': [{'trigger': 'time', 'at': '09:00:00'}],
-  'conditions': [{'condition': 'numeric_state', 'entity_id': 'sensor.uv_index_today_max', 'above': 5.9}],
-  'actions': [msg('☀️ UV will reach {{ states("sensor.uv_index_today_max") | round(0) | int }} today (high). Sunscreen/hat if you are out around midday.')]},
+  'conditions': [{'condition': 'numeric_state', 'entity_id': 'sensor.uv_index_today_max', 'above': 8.9}],
+  'actions': [msg('☀️ UV will reach {{ states("sensor.uv_index_today_max") | round(0) | int }} today, very high. Sunscreen/hat, and avoid the midday sun if you can.')]},
 }
 
 def api(method, path, body=None):
