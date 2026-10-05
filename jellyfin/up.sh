@@ -24,7 +24,6 @@ docker run -d --name jellyfin --restart unless-stopped \
   -v "$D/cache:/var/cache/jellyfin" -v "$D/log:/var/log/jellyfin" \
   -v /home/sergey/data/d1/anime:/home/sergey/data/d1/anime:ro \
   -v /home/sergey/data/d2/media:/home/sergey/data/d2/media:ro \
-  -v /home/sergey/Videos:/home/sergey/Videos:ro \
-  -v /home/sergey/Movies:/home/sergey/Movies:ro \
+  -v /home/sergey/media:/home/sergey/media:ro \
   -v "/home/sergey/Kristina Videos:/home/sergey/Kristina Videos:ro" \
   jellyfin/jellyfin:$TAG
