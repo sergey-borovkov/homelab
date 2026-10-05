@@ -86,7 +86,7 @@ BADGES = [{'type': 'entity', 'entity': 'person.sergey', 'show_name': True, 'show
              'visibility': [{'condition': 'numeric_state', 'entity': 'sensor.outdoor_air_index', **({'above': lo} if lo else {}), **({'below': hi} if hi else {})}]}
             for lo, hi, color, icon in AQI_BADGES],
           {'type': 'entity', 'entity': 'sensor.outdoor_temperature', 'name': 'Outside', 'show_name': True},
-          {'type': 'entity', 'entity': 'binary_sensor.archer_ax55_wan_status', 'name': 'Internet', 'show_name': True, 'icon': 'mdi:web'}]
+          {'type': 'entity', 'entity': 'binary_sensor.internet', 'name': 'Internet', 'show_name': True, 'icon': 'mdi:web'}]
 def config(map_attrs, w, h):
     home = [
       {'type': 'grid', 'column_span': 2, 'cards': [
@@ -168,14 +168,11 @@ def config(map_attrs, w, h):
           {'entity': f'sensor.{PB}_pm2_5_density_p_3_4', 'name': 'Bedroom'}, {'entity': f'sensor.{PO}_pm2_5_density_p_3_4', 'name': 'Office'}]},
         {'type': 'history-graph', 'title': 'Humidity', 'hours_to_show': 24, 'entities': [
           {'entity': f'sensor.{PB}_relative_humidity_p_3_1', 'name': 'Bedroom'}, {'entity': f'sensor.{PO}_relative_humidity_p_3_1', 'name': 'Office'}]},
-        {'type': 'heading', 'heading': 'Network', 'icon': 'mdi:router-wireless'},
+        {'type': 'heading', 'heading': 'Network', 'icon': 'mdi:web'},
         {'type': 'entities', 'entities': [
-          {'entity': 'binary_sensor.archer_ax55_wan_status', 'name': 'Internet'},
-          {'entity': 'sensor.archer_ax55_download_speed', 'name': 'Download now'},
-          {'entity': 'sensor.archer_ax55_upload_speed', 'name': 'Upload now'},
-          {'entity': 'sensor.archer_ax55_external_ip', 'name': 'External IP'},
-          {'entity': 'device_tracker.screenly_player_143', 'name': 'Screenly player .143'},
-          {'entity': 'device_tracker.screenly_player_230', 'name': 'Screenly player .230'}]},
+          {'entity': 'binary_sensor.internet', 'name': 'Internet'},
+          {'entity': 'binary_sensor.1_1_1_1', 'name': 'Cloudflare 1.1.1.1'},
+          {'entity': 'binary_sensor.8_8_8_8', 'name': 'Google 8.8.8.8'}]},
         {'type': 'heading', 'heading': 'Homelab PC', 'icon': 'mdi:server'},
         *[{'type': 'tile', 'entity': f'sensor.system_monitor_{k}', 'name': n} for k, n in
           [('processor_use', 'CPU'), ('processor_temperature', 'CPU temp'), ('memory_usage', 'RAM'), ('disk_usage', 'Disk')]]]}]

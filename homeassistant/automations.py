@@ -140,6 +140,15 @@ AUTOS = {
     {'action': 'notify.send_message', 'target': {'entity_id': 'notify.telegram_{{ trigger.id }}'},
      'data': {'message': '☔ Rain expected from about {{ rain.at }} (up to {{ rain.mm }} mm/h). Take an umbrella!'}}]},
 
+# Internet outage report to Sergey: sent once it's back (Telegram can't get through while it's down). Pings 1.1.1.1 + 8.8.8.8.
+'internet_outage': {'alias': 'Internet outage report', 'mode': 'single', 'description': 'Telegram Sergey how long the internet was down',
+  'triggers': [{'trigger': 'state', 'entity_id': 'binary_sensor.internet', 'from': 'off', 'to': 'on'}],
+  'conditions': [{'condition': 'template', 'value_template': '{{ now() - trigger.from_state.last_changed > timedelta(minutes=1) }}'}],
+  'actions': [{'delay': '00:00:20'},
+    {'action': 'notify.send_message', 'target': {'entity_id': 'notify.telegram_sergey'}, 'data': {'message':
+      "🌐 Internet was down {{ (trigger.from_state.last_changed | as_local).strftime('%H:%M') }}–{{ (trigger.to_state.last_changed | as_local).strftime('%H:%M') }}"
+      " ({{ ((trigger.to_state.last_changed - trigger.from_state.last_changed).total_seconds() / 60) | round(0) | int }} min)"}}]},
+
 # Daily weather for the rest of the day (now..23:00) + tomorrow: 10:00 to Sergey, 13:00 to Kristina
 'daily_weather': {'alias': 'Daily weather message', 'mode': 'parallel',
   'description': 'Rest-of-day weather, rain timing, outdoor air, UV and tomorrow; Sergey 10:00, Kristina 13:00',
