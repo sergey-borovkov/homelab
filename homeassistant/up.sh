@@ -4,6 +4,7 @@
 # Custom integrations via HACS; Dreame Vacuum (Tasshack) v2 for the Dreame X50 Ultra (Dreamehome account).
 # Xiaomi Home: one entry per region (China: CN-market devices, Singapore: global ones). New devices don't
 # appear on reload/restart: Xiaomi Home entry -> Configure -> "Update devices". Then rerun dashboard_xiaomi.py.
+# Outdoor ozone/NO2/dust/UV: Open-Meteo REST sensors in config/configuration.yaml. Alerts: automations.py.
 set -euo pipefail
 cd "$(dirname "$0")"
 docker pull ghcr.io/home-assistant/home-assistant:stable

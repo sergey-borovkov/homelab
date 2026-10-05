@@ -83,7 +83,7 @@ BADGES = [{'type': 'entity', 'entity': 'person.sergey', 'show_name': True, 'show
           {'type': 'entity', 'entity': 'person.kristina', 'show_name': True, 'show_icon': True},
           # outdoor air in words, icon coloured by US AQI band (one badge per band, only the matching one shows)
           *[{'type': 'entity', 'entity': 'sensor.outdoor_air', 'name': 'Outdoor air', 'show_name': True, 'icon': icon, 'color': color,
-             'visibility': [{'condition': 'numeric_state', 'entity': 'sensor.outdoor_aqi', **({'above': lo} if lo else {}), **({'below': hi} if hi else {})}]}
+             'visibility': [{'condition': 'numeric_state', 'entity': 'sensor.outdoor_air_index', **({'above': lo} if lo else {}), **({'below': hi} if hi else {})}]}
             for lo, hi, color, icon in AQI_BADGES],
           {'type': 'entity', 'entity': 'sensor.outdoor_temperature', 'name': 'Outside', 'show_name': True},
           {'type': 'entity', 'entity': 'binary_sensor.archer_ax55_wan_status', 'name': 'Internet', 'show_name': True, 'icon': 'mdi:web'}]
@@ -93,8 +93,13 @@ def config(map_attrs, w, h):
         {'type': 'heading', 'heading': 'Home', 'icon': 'mdi:floor-plan'}, map_card(map_attrs, w, h)]},
       {'type': 'grid', 'cards': [
         {'type': 'heading', 'heading': 'Air', 'icon': 'mdi:weather-windy'},
-        gauge('sensor.outdoor_aqi', 'Outside air (AQI)', 300, AQI_BANDS),
+        gauge('sensor.outdoor_air_index', 'Outside air (AQI)', 300, AQI_BANDS),
         gauge('sensor.outdoor_humidity', 'Outside humidity', 100, RH_BANDS),
+        {'type': 'glance', 'show_state': True, 'state_color': False, 'grid_options': {'columns': 'full'}, 'entities': [
+          {'entity': 'sensor.outdoor_ozone_index', 'name': 'Ozone', 'icon': 'mdi:molecule'},
+          {'entity': 'sensor.outdoor_no2_index', 'name': 'NO₂', 'icon': 'mdi:car'},
+          {'entity': 'sensor.outdoor_dust', 'name': 'Dust', 'icon': 'mdi:weather-dust'},
+          {'entity': 'sensor.uv_index_today_max', 'name': 'UV today', 'icon': 'mdi:sun-wireless'}]},
         gauge(f'sensor.{PB}_pm2_5_density_p_3_4', 'Bedroom PM2.5', 75, PM_BANDS),
         gauge(f'sensor.{PB}_relative_humidity_p_3_1', 'Bedroom humidity', 100, RH_BANDS),
         gauge(f'sensor.{PO}_pm2_5_density_p_3_4', 'Office PM2.5', 75, PM_BANDS),
