@@ -90,18 +90,20 @@ AUTOS = {
   'actions': [msg('☀️ UV will reach {{ states("sensor.uv_index_today_max") | round(0) | int }} today, very high. Sunscreen/hat, and avoid the midday sun if you can.')]},
 
 # Rain heads-up to whoever just left: Met.no hourly forecast, next 6 hours, >= 0.3 mm/h or a rainy condition.
-# Only after being home 30+ min, so a phone briefly dropping off Wi-Fi/GPS doesn't trigger it.
+# Only after being home 30+ min, so a phone briefly dropping off Wi-Fi/GPS doesn't trigger it. Daytime only (07-23):
+# no messages at night, and rain that falls while we're asleep doesn't count.
 'rain_when_leaving': {'alias': 'Rain heads-up when leaving', 'mode': 'parallel',
   'description': 'Telegram the person who left if rain is forecast in the next 6 hours',
   'triggers': [{'trigger': 'state', 'entity_id': f'person.{p}', 'from': 'home', 'not_to': ['unknown', 'unavailable'], 'for': '00:02:00', 'id': p}
                for p in ('sergey', 'kristina')],
-  'conditions': [{'condition': 'template', 'value_template': '{{ now() - trigger.from_state.last_changed > timedelta(minutes=30) }}'}],
+  'conditions': [{'condition': 'template', 'value_template': '{{ now() - trigger.from_state.last_changed > timedelta(minutes=30) }}'},
+                 {'condition': 'time', 'after': '07:00:00', 'before': '23:00:00'}],
   'actions': [
     {'action': 'weather.get_forecasts', 'target': {'entity_id': 'weather.forecast_home'}, 'data': {'type': 'hourly'}, 'response_variable': 'fc'},
     {'variables': {'rain': (
       "{% set ns = namespace(at=none, mm=0) %}"
       "{% for f in fc['weather.forecast_home'].forecast %}{% set t = as_datetime(f.datetime) %}"
-      "{% if now() - timedelta(hours=1) < t < now() + timedelta(hours=6) and ((f.precipitation or 0) >= 0.3 or f.condition in "
+      "{% if now() - timedelta(hours=1) < t < now() + timedelta(hours=6) and 7 <= (t | as_local).hour < 23 and ((f.precipitation or 0) >= 0.3 or f.condition in "
       "['rainy', 'pouring', 'lightning-rainy', 'snowy', 'snowy-rainy', 'hail']) %}"
       "{% if ns.at is none %}{% set ns.at = t %}{% endif %}{% set ns.mm = [ns.mm, f.precipitation or 0] | max %}{% endif %}{% endfor %}"
       "{{ {'at': (ns.at | as_local).strftime('%H:%M') if ns.at else '', 'mm': ns.mm} }}")}},
