@@ -22,7 +22,8 @@ users() { # app users (name list) -> compare with last run
   echo "jellyfin: $(curl -s -H "Authorization: MediaBrowser Token=\"$JK\"" http://127.0.0.1:8096/Users | jq -r '[.[].Name] | join(", ")')"
   local K; K=$(jq -r .main.apiKey "$H/arr/seerr/settings.json")
   echo "seerr: $(curl -s -H "X-Api-Key: $K" 'http://127.0.0.1:5055/api/v1/user?take=100' | jq -r '[.results[].displayName] | join(", ")')"
-  echo "ryot: $(docker exec ryot-db psql -U postgres -At -c 'select string_agg(name, $$, $$ order by name) from "user"')"
+  # Ryot runs on the VPS
+  echo "ryot: $(ssh vps "docker exec ryot-db psql -U postgres -At -c 'select string_agg(name, \$\$, \$\$ order by name) from \"user\"'")"
   ( set -a; . "$H/bookorbit/.env"; docker exec bookorbit-db psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -At \
       -c 'select string_agg(username, $$, $$ order by username) from users' ) | sed 's/^/bookorbit: /'
   # Vaultwarden runs on the VPS
