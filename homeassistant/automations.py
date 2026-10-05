@@ -18,6 +18,35 @@ def purifier_auto_unless_sleep(P):  # don't wake anyone: a purifier already in S
 MODERATE, BAD = 'input_boolean.outdoor_air_moderate_alert', 'input_boolean.smog_alert_active'
 AIR = '{{ states("sensor.outdoor_air") }}'
 
+# Daily weather message (needs response variables fch = hourly, fcd = daily forecast of weather.forecast_home)
+WEATHER_MSG = (
+  "{% set W = {'sunny': ('☀️', 'sunny'), 'clear-night': ('🌙', 'clear'), 'partlycloudy': ('⛅', 'partly cloudy'),"
+  " 'cloudy': ('☁️', 'cloudy'), 'rainy': ('🌧', 'rain'), 'pouring': ('🌧', 'heavy rain'), 'lightning': ('🌩', 'thunder'),"
+  " 'lightning-rainy': ('⛈', 'thunderstorms'), 'snowy': ('❄️', 'snow'), 'snowy-rainy': ('🌨', 'sleet'), 'fog': ('🌫', 'fog'),"
+  " 'windy': ('💨', 'windy'), 'windy-variant': ('💨', 'windy'), 'hail': ('🧊', 'hail'), 'exceptional': ('⚠️', 'unusual weather')} %}"
+  "{% set ns = namespace(lo=99, hi=-99, wind=0, conds=[], rain=none, mm=0) %}"
+  "{% for f in fch['weather.forecast_home'].forecast %}{% set t = as_datetime(f.datetime) | as_local %}"
+  "{% if t.date() == now().date() and now().hour <= t.hour < 23 %}"
+  "{% set ns.lo = [ns.lo, f.temperature] | min %}{% set ns.hi = [ns.hi, f.temperature] | max %}"
+  "{% set ns.wind = [ns.wind, f.wind_speed or 0] | max %}"
+  "{% if not ns.conds or ns.conds[-1] != f.condition %}{% set ns.conds = ns.conds + [f.condition] %}{% endif %}"
+  "{% if ((f.precipitation or 0) >= 0.3 or f.condition in ['rainy', 'pouring', 'lightning-rainy', 'snowy', 'snowy-rainy', 'hail']) %}"
+  "{% if ns.rain is none %}{% set ns.rain = t %}{% endif %}{% set ns.mm = [ns.mm, f.precipitation or 0] | max %}{% endif %}"
+  "{% endif %}{% endfor %}"
+  "{% set c = ns.conds | unique | list %}{% set main = W.get(c[0], ('🌤', c[0])) if c else ('🌤', '') %}"
+  "{{ main[0] }} Weather for the rest of today\n"
+  "🌡 {{ ns.lo | round(0) | int }}–{{ ns.hi | round(0) | int }} °C · "
+  "{% for k in c[:3] %}{{ W.get(k, ('', k))[0] }} {{ W.get(k, ('', k))[1] }}{{ ' → ' if not loop.last }}{% endfor %}\n"
+  "{% if ns.rain %}☔ Rain from ~{{ ns.rain.strftime('%H:%M') }} (up to {{ ns.mm }} mm/h), take an umbrella{% else %}🌂 No rain expected{% endif %}\n"
+  "{% set wu = state_attr('weather.forecast_home', 'wind_speed_unit') %}"
+  "{% if (ns.wind > 10 and wu == 'm/s') or (ns.wind > 36 and wu != 'm/s') %}💨 Windy, gusts up to {{ ns.wind | round(0) | int }} {{ wu }}\n{% endif %}"
+  "{% set aqi = states('sensor.outdoor_air_index') | int(0) %}{{ '🍃' if aqi <= 50 else ('🌫' if aqi <= 100 else '😷') }} Outside air: {{ states('sensor.outdoor_air') }}\n"
+  "{% set uv = states('sensor.uv_index_today_max') | float(0) %}{% if uv >= 6 %}🕶 UV up to {{ uv | round(0) | int }}, sunscreen around midday\n{% endif %}"
+  "{% set tm = (fcd['weather.forecast_home'].forecast | selectattr('datetime', 'search', (now() + timedelta(days=1)).strftime('%Y-%m-%d')) | list) %}"
+  "{% if tm %}{% set d = tm[0] %}📅 Tomorrow: {{ W.get(d.condition, ('', d.condition))[0] }} {{ W.get(d.condition, ('', d.condition))[1] }}, "
+  "{{ d.templow | round(0) | int }}–{{ d.temperature | round(0) | int }} °C{% if (d.precipitation or 0) > 0.5 %}, ☔ {{ d.precipitation }} mm{% endif %}{% endif %}"
+)
+
 AUTOS = {
 'rice_ready': {'alias': 'Rice is ready', 'description': 'Telegram both of us when the rice cooker finishes', 'mode': 'single',
   'triggers': [{'trigger': 'state', 'entity_id': f'event.{C}_cooking_finished_e_2_1', 'not_from': ['unavailable'], 'not_to': ['unavailable', 'unknown']},
@@ -110,6 +139,15 @@ AUTOS = {
     {'condition': 'template', 'value_template': "{{ rain.at != '' }}"},
     {'action': 'notify.send_message', 'target': {'entity_id': 'notify.telegram_{{ trigger.id }}'},
      'data': {'message': '☔ Rain expected from about {{ rain.at }} (up to {{ rain.mm }} mm/h). Take an umbrella!'}}]},
+
+# Daily weather for the rest of the day (now..23:00) + tomorrow: 10:00 to Sergey, 13:00 to Kristina
+'daily_weather': {'alias': 'Daily weather message', 'mode': 'parallel',
+  'description': 'Rest-of-day weather, rain timing, outdoor air, UV and tomorrow; Sergey 10:00, Kristina 13:00',
+  'triggers': [{'trigger': 'time', 'at': '10:00:00', 'id': 'sergey'}, {'trigger': 'time', 'at': '13:00:00', 'id': 'kristina'}],
+  'actions': [
+    {'action': 'weather.get_forecasts', 'target': {'entity_id': 'weather.forecast_home'}, 'data': {'type': 'hourly'}, 'response_variable': 'fch'},
+    {'action': 'weather.get_forecasts', 'target': {'entity_id': 'weather.forecast_home'}, 'data': {'type': 'daily'}, 'response_variable': 'fcd'},
+    {'action': 'notify.send_message', 'target': {'entity_id': 'notify.telegram_{{ trigger.id }}'}, 'data': {'message': WEATHER_MSG}}]},
 }
 
 def api(method, path, body=None):
