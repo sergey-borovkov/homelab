@@ -129,6 +129,12 @@ def config(map_attrs, w, h):
         {'type': 'heading', 'heading': 'Kitchen', 'icon': 'mdi:rice'},
         {'type': 'tile', 'entity': f'sensor.{C}_status_p_2_1', 'name': 'Rice cooker'},
         {'type': 'tile', 'entity': f'sensor.{C}_left_time_p_3_3', 'name': 'Time left'},
+        # only while it's keeping warm: how long, and a one-tap stop (Cancel Cooking also ends keep-warm)
+        *[{'type': 'conditional', 'conditions': [{'condition': 'state', 'entity': f'sensor.{C}_status_p_2_1', 'state': 'KeepWarm'}], 'card': c} for c in [
+          {'type': 'tile', 'entity': f'sensor.{C}_keepwarm_time_p_3_4', 'name': 'Keeping warm for', 'icon': 'mdi:heat-wave', 'color': 'orange',
+           'grid_options': {'columns': 'full'}},
+          {'type': 'button', 'name': 'Stop keeping warm', 'icon': 'mdi:power', 'show_state': False, 'grid_options': {'columns': 'full', 'rows': 2},
+           'tap_action': {'action': 'perform-action', 'perform_action': 'button.press', 'target': {'entity_id': f'button.{C}_cancel_cooking_a_2_2'}}}]],
         {'type': 'button', 'name': 'Fine cook', 'icon': 'mdi:rice', 'show_state': False, 'grid_options': {'columns': 'full', 'rows': 2},
          'tap_action': cook('Fine cook', 1)}]}]
     details = [
