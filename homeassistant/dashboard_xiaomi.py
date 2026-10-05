@@ -74,10 +74,17 @@ def purifier_details(name, P):
       {'entity': f'switch.{P}_physical_controls_locked_p_8_1', 'name': 'Child lock'},
       {'entity': f'select.{P}_brightness_p_13_2', 'name': 'Display brightness'}]}]
 
+# US AQI bands (0-500): good / moderate / unhealthy for sensitive / unhealthy / very unhealthy / hazardous
+AQI_BANDS = [(None, 50, GOOD), (50, 100, OK), (100, 150, '#ef6c00'), (150, 200, BAD), (200, 300, '#6a1b9a'), (300, None, '#4e342e')]
+AQI_BADGES = [(None, 50.5, 'green', 'mdi:leaf'), (50.5, 100.5, 'amber', 'mdi:weather-hazy'), (100.5, 150.5, 'orange', 'mdi:weather-hazy'),
+              (150.5, 200.5, 'red', 'mdi:alert'), (200.5, None, 'purple', 'mdi:biohazard')]
 # Top row: who's home (phones on Wi-Fi + Companion app), outdoor air, internet
 BADGES = [{'type': 'entity', 'entity': 'person.sergey', 'show_name': True, 'show_icon': True},
           {'type': 'entity', 'entity': 'person.kristina', 'show_name': True, 'show_icon': True},
-          {'type': 'entity', 'entity': 'sensor.outdoor_aqi', 'name': 'Outdoor AQI', 'show_name': True, 'icon': 'mdi:weather-hazy'},
+          # outdoor air in words, icon coloured by US AQI band (one badge per band, only the matching one shows)
+          *[{'type': 'entity', 'entity': 'sensor.outdoor_air', 'name': 'Outdoor air', 'show_name': True, 'icon': icon, 'color': color,
+             'visibility': [{'condition': 'numeric_state', 'entity': 'sensor.outdoor_aqi', **({'above': lo} if lo else {}), **({'below': hi} if hi else {})}]}
+            for lo, hi, color, icon in AQI_BADGES],
           {'type': 'entity', 'entity': 'sensor.outdoor_temperature', 'name': 'Outside', 'show_name': True},
           {'type': 'entity', 'entity': 'binary_sensor.archer_ax55_wan_status', 'name': 'Internet', 'show_name': True, 'icon': 'mdi:web'}]
 def config(map_attrs, w, h):
@@ -86,6 +93,8 @@ def config(map_attrs, w, h):
         {'type': 'heading', 'heading': 'Home', 'icon': 'mdi:floor-plan'}, map_card(map_attrs, w, h)]},
       {'type': 'grid', 'cards': [
         {'type': 'heading', 'heading': 'Air', 'icon': 'mdi:weather-windy'},
+        gauge('sensor.outdoor_aqi', 'Outside air (AQI)', 300, AQI_BANDS),
+        gauge('sensor.outdoor_humidity', 'Outside humidity', 100, RH_BANDS),
         gauge(f'sensor.{PB}_pm2_5_density_p_3_4', 'Bedroom PM2.5', 75, PM_BANDS),
         gauge(f'sensor.{PB}_relative_humidity_p_3_1', 'Bedroom humidity', 100, RH_BANDS),
         gauge(f'sensor.{PO}_pm2_5_density_p_3_4', 'Office PM2.5', 75, PM_BANDS),
