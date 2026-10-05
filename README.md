@@ -17,7 +17,7 @@ front door live on the VPS. No Kubernetes: every service is one `up.sh` you can 
 flowchart LR
   phone((phone / laptop<br/>outside)) -- "https <app>.daoseeking.uk" --> vcaddy
   phone -. "fallback <app>.home.daoseeking.uk:8443" .-> router[router<br/>forwards 8443 only]
-  phone -. "Tailscale: <app>.ts.daoseeking.uk" .-> caddy
+  phone -. "Tailscale: admin tools at <app>.daoseeking.uk" .-> caddy
 
   subgraph VPS [Oracle VPS, Milan]
     vcaddy[Caddy] --> vapps[Vaultwarden · Securo · Actual · Ryot<br/>Zipline · Uptime Kuma outside]
@@ -41,7 +41,10 @@ flowchart LR
     never leave the house.
   - `<app>.home.daoseeking.uk:8443` → straight home (DDNS-updated). The ISP blocks inbound 80/443, so the router
     forwards **8443** to home Caddy and nothing else. Works even when the VPS is down.
-  - `<app>.ts.daoseeking.uk` → the desktop's Tailscale IP, for the admin tools from outside.
+  - Admin tools (Sonarr, Radarr, Prowlarr, Bazarr, qBittorrent, Shoko, AdGuard) also use plain `<app>.daoseeking.uk`,
+    but those records point at the desktop's Tailscale IP instead of the VPS, and AdGuard answers them with the
+    desktop on the LAN: one link works at home and over Tailscale. `<app>.ts.daoseeking.uk` (Tailscale IP) stays
+    for Uptime Kuma.
 - **Certificates:** home Caddy gets wildcards via Cloudflare DNS-01 (no inbound port needed); the VPS Caddy gets
   one per host over port 80.
 - **Three exposure levels**, all set in [`caddy/Caddyfile`](caddy/Caddyfile): public apps (each with its own

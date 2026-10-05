@@ -25,7 +25,7 @@
           key: "{{HOMEPAGE_VAR_SEERR}}"
     - Shoko:
         icon: shoko.png
-        href: https://shoko.home.daoseeking.uk/webui
+        href: https://shoko.daoseeking.uk/webui
         container: shoko
         server: local
         description: Anime metadata (AniDB)
@@ -43,7 +43,7 @@
 - Downloads:
     - Sonarr:
         icon: sonarr.png
-        href: https://sonarr.home.daoseeking.uk
+        href: https://sonarr.daoseeking.uk
         container: sonarr
         server: local
         widget:
@@ -52,7 +52,7 @@
           key: "{{HOMEPAGE_VAR_SONARR}}"
     - Radarr:
         icon: radarr.png
-        href: https://radarr.home.daoseeking.uk
+        href: https://radarr.daoseeking.uk
         container: radarr
         server: local
         widget:
@@ -61,7 +61,7 @@
           key: "{{HOMEPAGE_VAR_RADARR}}"
     - qBittorrent:
         icon: qbittorrent.png
-        href: https://qbit.home.daoseeking.uk
+        href: https://qbit.daoseeking.uk
         container: qbittorrent
         server: local
         widget:
@@ -72,7 +72,7 @@
           enableLeechProgress: true
     - Prowlarr:
         icon: prowlarr.png
-        href: https://prowlarr.home.daoseeking.uk
+        href: https://prowlarr.daoseeking.uk
         container: prowlarr
         server: local
         widget:
@@ -81,7 +81,7 @@
           key: "{{HOMEPAGE_VAR_PROWLARR}}"
     - Bazarr:
         icon: bazarr.png
-        href: https://bazarr.home.daoseeking.uk
+        href: https://bazarr.daoseeking.uk
         container: bazarr
         server: local
         widget:
@@ -133,7 +133,7 @@
 - Infrastructure:
     - AdGuard Home:
         icon: adguard-home.png
-        href: https://adguard.home.daoseeking.uk
+        href: https://adguard.daoseeking.uk
         container: adguard
         server: local
         widget:
@@ -153,7 +153,7 @@
         icon: uptime-kuma.png
         href: https://status.daoseeking.uk
         siteMonitor: https://status.daoseeking.uk
-        description: On the VPS: public URLs from outside + home tools over Tailscale → Telegram
+        description: "On the VPS: public URLs from outside + home tools over Tailscale → Telegram"
     - Cloudflare DDNS:
         icon: cloudflare.png
         container: ddns

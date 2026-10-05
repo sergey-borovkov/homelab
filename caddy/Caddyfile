@@ -132,6 +132,8 @@
 #   <app>.daoseeking.uk              same public apps through the VPS front door (~/homelab/vps/Caddyfile);
 #                                    on the LAN AdGuard answers them with this PC so streams stay local
 #   <app>.ts.daoseeking.uk           admin tools over Tailscale (DNS -> this PC's tailnet IP)
+#   admin tools also answer at <app>.daoseeking.uk: Cloudflare points those names at the tailnet IP and
+#   AdGuard at this PC, so one link works on the LAN and over Tailscale (still 403 from anywhere else)
 *.daoseeking.uk, *.home.daoseeking.uk, *.home.daoseeking.uk:8443, *.ts.daoseeking.uk {
 	tls {
 		dns cloudflare {env.CLOUDFLARE_API_TOKEN}
@@ -180,38 +182,38 @@
 		reverse_proxy 127.0.0.1:3002
 	}
 
-	# Admin tools: LAN / Tailscale only
-	@adguard host adguard.home.daoseeking.uk adguard.ts.daoseeking.uk
+	# Admin tools: LAN / Tailscale only; <app>.daoseeking.uk never goes via the VPS (tailnet IP in DNS)
+	@adguard host adguard.daoseeking.uk adguard.home.daoseeking.uk adguard.ts.daoseeking.uk
 	handle @adguard {
 		respond @outside "LAN only" 403
 		reverse_proxy 192.168.1.216:3080
 	}
-	@sonarr host sonarr.home.daoseeking.uk sonarr.ts.daoseeking.uk
+	@sonarr host sonarr.daoseeking.uk sonarr.home.daoseeking.uk sonarr.ts.daoseeking.uk
 	handle @sonarr {
 		respond @outside "LAN only" 403
 		reverse_proxy 127.0.0.1:8989
 	}
-	@radarr host radarr.home.daoseeking.uk radarr.ts.daoseeking.uk
+	@radarr host radarr.daoseeking.uk radarr.home.daoseeking.uk radarr.ts.daoseeking.uk
 	handle @radarr {
 		respond @outside "LAN only" 403
 		reverse_proxy 127.0.0.1:7878
 	}
-	@prowlarr host prowlarr.home.daoseeking.uk prowlarr.ts.daoseeking.uk
+	@prowlarr host prowlarr.daoseeking.uk prowlarr.home.daoseeking.uk prowlarr.ts.daoseeking.uk
 	handle @prowlarr {
 		respond @outside "LAN only" 403
 		reverse_proxy 127.0.0.1:9696
 	}
-	@qbit host qbit.home.daoseeking.uk qbit.ts.daoseeking.uk
+	@qbit host qbit.daoseeking.uk qbit.home.daoseeking.uk qbit.ts.daoseeking.uk
 	handle @qbit {
 		respond @outside "LAN only" 403
 		reverse_proxy 127.0.0.1:8090
 	}
-	@bazarr host bazarr.home.daoseeking.uk bazarr.ts.daoseeking.uk
+	@bazarr host bazarr.daoseeking.uk bazarr.home.daoseeking.uk bazarr.ts.daoseeking.uk
 	handle @bazarr {
 		respond @outside "LAN only" 403
 		reverse_proxy 127.0.0.1:6767
 	}
-	@shoko host shoko.home.daoseeking.uk shoko.ts.daoseeking.uk
+	@shoko host shoko.daoseeking.uk shoko.home.daoseeking.uk shoko.ts.daoseeking.uk
 	handle @shoko {
 		respond @outside "LAN only" 403
 		reverse_proxy 127.0.0.1:8111
